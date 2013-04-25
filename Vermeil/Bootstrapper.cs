@@ -61,14 +61,14 @@ namespace Vermeil
             phoneApplicationService.Deactivated += PhoneApplicationServiceDeactivated;
             Application.Current.ApplicationLifetimeObjects.Add(phoneApplicationService);
             Application.Current.UnhandledException += (s, e) =>
-                                                          {
-                                                              var logger = Container.TryResolve<ILogger>();
-                                                              if (logger != null)
-                                                              {
-                                                                  logger.Fatal("Application Unhandled Exception", e.ExceptionObject);
-                                                              }
-                                                              OnApplicationUnhandledException(e);
-                                                          };
+                {
+                    var logger = Container.TryResolve<ILogger>();
+                    if (logger != null)
+                    {
+                        logger.Fatal("Application Unhandled Exception", e.ExceptionObject);
+                    }
+                    OnApplicationUnhandledException(e);
+                };
         }
 
         private void InitMvvm()
@@ -112,13 +112,13 @@ namespace Vermeil
 
         private void FrameNavigating(object sender, NavigatingCancelEventArgs e)
         {
-            if (DesignerProperties.IsInDesignTool)
+            if (DesignerProperties.IsInDesignTool || e.NavigationMode == NavigationMode.Back)
             {
                 return;
             }
 
             var model = GetCurrentViewModel();
-            if (model == null || e.NavigationMode == NavigationMode.Back)
+            if (model == null)
             {
                 return;
             }
@@ -128,16 +128,17 @@ namespace Vermeil
 
         private void FrameNavigated(object sender, NavigationEventArgs e)
         {
-            if (DesignerProperties.IsInDesignTool)
+            if (DesignerProperties.IsInDesignTool || (e.NavigationMode == NavigationMode.Back && !e.IsNavigationInitiator))
             {
                 return;
             }
-
             var page = e.Content as PhoneApplicationPage;
             if (page == null)
             {
                 return;
             }
+            page.Loaded -= PageLoaded;
+            page.Unloaded -= PageUnloaded;
             var currentContext = page.DataContext as ViewModel;
             if (currentContext != null)
             {
@@ -155,9 +156,6 @@ namespace Vermeil
                 viewModel.RootElement = page;
                 page.DataContext = viewModel;
             }
-
-            page.Loaded -= PageLoaded;
-            page.Unloaded -= PageUnloaded;
             page.Loaded += PageLoaded;
             page.Unloaded += PageUnloaded;
         }
@@ -237,9 +235,9 @@ namespace Vermeil
         private void BindNavigationParameters(ViewModel model)
         {
             var injectors = model.GetType().
-                GetProperties().
-                Select(x => new {Property = x, Attribute = (NavigationParamAttribute) x.GetCustomAttributes(typeof (NavigationParamAttribute), false).FirstOrDefault()}).
-                Where(x => x.Attribute != null);
+                                  GetProperties().
+                                  Select(x => new {Property = x, Attribute = (NavigationParamAttribute) x.GetCustomAttributes(typeof (NavigationParamAttribute), false).FirstOrDefault()}).
+                                  Where(x => x.Attribute != null);
             foreach (var injector in injectors)
             {
                 var propertyValue = GetParameter(injector.Property.PropertyType, injector.Attribute);

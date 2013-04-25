@@ -15,7 +15,7 @@ namespace Sample
         {
             Container.Register<ILogger, DebugLogger>();
 
-            ViewModelMap.Register<MainPage, MainPageViewModel>();
+
             Container.Resolve<ILogger>().Debug("Init complete");
         }
     }
