@@ -110,7 +110,33 @@ namespace Vermeil
         }
 
         #endregion
+        
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
+        }
 
+        public static string Ellipsize(this string input, int maxLenght)
+        {
+            if (!string.IsNullOrWhiteSpace(input) && input.Length > maxLenght)
+            {
+                return input.Substring(0, maxLenght - 1) + "...";
+            }
+            return input;
+        }
+
+        public static string UppercaseFirst(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            return char.ToUpper(s[0]) + s.Substring(1);
+        }
+        
         public static Version GetAppVersion()
         {
             try
@@ -137,8 +163,7 @@ namespace Vermeil
             }
             return default(Version);
         }
-
-
+        
         internal static int CombineHashCodes(int hash, int anotherHash)
         {
             return (hash << 5) + hash ^ anotherHash;
