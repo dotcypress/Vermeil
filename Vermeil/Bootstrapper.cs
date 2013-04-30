@@ -23,11 +23,13 @@ namespace Vermeil
 {
     public abstract class Bootstrapper : IApplicationService
     {
+        private bool _isFastResume;
+        private bool _clearHistory;
+
         protected Bootstrapper()
         {
             Container = new IocContainer();
             ViewModelMap = new ViewModelMap();
-
             InitRootFrame();
             InitContainer();
             InitPhoneServices();
@@ -112,6 +114,22 @@ namespace Vermeil
 
         private void FrameNavigating(object sender, NavigatingCancelEventArgs e)
         {
+            if (_isFastResume)
+            {
+                _isFastResume = false;
+                var args = new FastResumeArgs(e.Uri);
+                OnFastResume(args);
+                
+                if (args.ClearHistory)
+                {
+                    _clearHistory = true;
+                }
+                else if (args.PreserveLastOpenedPage)
+                {
+                    e.Cancel = true;
+                }
+                return;
+            }
             if (DesignerProperties.IsInDesignTool || e.NavigationMode == NavigationMode.Back)
             {
                 return;
@@ -128,9 +146,22 @@ namespace Vermeil
 
         private void FrameNavigated(object sender, NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Reset)
+            {
+                _isFastResume = true;
+                return;
+            }
             if (DesignerProperties.IsInDesignTool || (e.NavigationMode == NavigationMode.Back && !e.IsNavigationInitiator))
             {
                 return;
+            }
+            if (_clearHistory)
+            {
+                _clearHistory = false;
+                var frame = Container.Resolve<PhoneApplicationFrame>();
+                while (frame.RemoveBackEntry() != null)
+                {
+                }
             }
             var page = e.Content as PhoneApplicationPage;
             if (page == null)
@@ -285,8 +316,6 @@ namespace Vermeil
 
         public static Bootstrapper Current { get; private set; }
 
-        protected PhoneApplicationFrame RootFrame { get; set; }
-
         public IocContainer Container { get; private set; }
 
         public ViewModelMap ViewModelMap { get; private set; }
@@ -296,6 +325,10 @@ namespace Vermeil
         #region Virtual members
 
         protected virtual void Init()
+        {
+        }
+
+        protected virtual void OnFastResume(FastResumeArgs args)
         {
         }
 

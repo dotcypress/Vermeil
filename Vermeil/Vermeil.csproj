@@ -129,6 +129,7 @@
     <Compile Include="MVVM\NavigationParamAttribute.cs" />
     <Compile Include="MVVM\ViewModel.cs" />
     <Compile Include="MVVM\ViewModelMap.cs" />
+    <Compile Include="Navigation\FastResumeArgs.cs" />
     <Compile Include="Navigation\INavigationManager.cs" />
     <Compile Include="Navigation\NavigationManager.cs" />
     <Compile Include="Navigation\PageQuery.cs" />
