@@ -13,7 +13,7 @@ using Microsoft.Phone.Shell;
 
 #endregion
 
-namespace Vermeil.Controls
+namespace Vermeil.UI.Controls
 {
     [ContentProperty("Buttons")]
     public class BindableApplicationBar : ItemsControl, IApplicationBar

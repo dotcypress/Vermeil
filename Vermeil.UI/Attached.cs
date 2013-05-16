@@ -12,7 +12,7 @@ using Vermeil.Cache;
 
 #endregion
 
-namespace Vermeil
+namespace Vermeil.UI
 {
     public class Attached
     {

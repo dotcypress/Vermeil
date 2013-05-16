@@ -5,11 +5,11 @@ using System.Windows.Controls;
 
 #endregion
 
-namespace Vermeil.Controls
+namespace Vermeil.UI.Controls
 {
     public abstract class DataTemplateSelector : ContentControl
     {
-        public abstract DataTemplate GetTemplate(object item);
+        protected abstract DataTemplate GetTemplate(object item);
 
         protected override void OnContentChanged(object oldContent, object newContent)
         {

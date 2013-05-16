@@ -10,7 +10,7 @@ using Microsoft.Phone.Controls;
 
 #endregion
 
-namespace Vermeil.Controls
+namespace Vermeil.UI.Controls
 {
     public class AnimatedFrame : TransitionFrame
     {

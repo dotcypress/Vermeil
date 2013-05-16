@@ -9,7 +9,7 @@ using Microsoft.Phone.Controls;
 
 #endregion
 
-namespace Vermeil.Controls
+namespace Vermeil.UI.Controls
 {
     public class OrientedLayout : Control
     {

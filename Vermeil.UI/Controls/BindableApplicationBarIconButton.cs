@@ -7,7 +7,7 @@ using Microsoft.Phone.Shell;
 
 #endregion
 
-namespace Vermeil.Controls
+namespace Vermeil.UI.Controls
 {
     public class BindableApplicationBarIconButton : FrameworkElement, IApplicationBarIconButton
     {

@@ -8,7 +8,6 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Vermeil.Cache;
-using Vermeil.Controls;
 using Vermeil.IoC;
 using Vermeil.Logging;
 using Vermeil.MVVM;
@@ -334,7 +333,7 @@ namespace Vermeil
 
         protected virtual PhoneApplicationFrame CreateRootFrame()
         {
-            return new AnimatedFrame();
+            return new PhoneApplicationFrame();
         }
 
         protected virtual void OnApplicationActivated()
