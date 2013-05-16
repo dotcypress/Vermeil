@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Windows;
-using System.Windows.Media;
 using System.Xml.Linq;
 
 #endregion
@@ -62,25 +60,6 @@ namespace Vermeil
         {
             var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return Math.Ceiling((date.ToUniversalTime() - origin).TotalSeconds);
-        }
-
-        #endregion
-
-        #region Visual tree
-
-        public static IEnumerable<DependencyObject> GetAncestors(this DependencyObject node)
-        {
-            var parent = VisualTreeHelper.GetParent(node);
-            while (parent != null)
-            {
-                yield return parent;
-                parent = VisualTreeHelper.GetParent(parent);
-            }
-        }
-
-        public static DependencyObject FindAncestor(this DependencyObject target, Type ancestorType)
-        {
-            return target.GetAncestors().FirstOrDefault(ancestorType.IsInstanceOfType);
         }
 
         #endregion

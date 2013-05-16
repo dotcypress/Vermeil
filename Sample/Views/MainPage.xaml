@@ -6,7 +6,7 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                             xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-                            xmlns:vermeil="clr-namespace:Vermeil;assembly=Vermeil.UI" 
+                            xmlns:vermeil="clr-namespace:Vermeil;assembly=Vermeil.UI"
                             xmlns:controls="clr-namespace:Vermeil.Controls;assembly=Vermeil.UI"
                             mc:Ignorable="d"
                             FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -38,12 +38,12 @@
 
         <controls:BindableApplicationBar IsVisible="{Binding ShowMenu}">
             <controls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Select.png"
-                                                              Text="info"
-                                                              Command="{Binding InfoCommand}"
-                                                              CommandParameter="{Binding MyProperty}" />
+                                                       Text="info"
+                                                       Command="{Binding InfoCommand}"
+                                                       CommandParameter="{Binding MyProperty}" />
             <controls:BindableApplicationBar.MenuItems>
                 <controls:BindableApplicationBarMenuItem Text="about"
-                                                                Command="{Binding AboutCommand}" />
+                                                         Command="{Binding AboutCommand}" />
             </controls:BindableApplicationBar.MenuItems>
         </controls:BindableApplicationBar>
     </Grid>
