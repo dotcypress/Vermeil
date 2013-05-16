@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 #endregion
 
-namespace Vermeil.UI
+namespace Vermeil
 {
     public static class UIExtensions
     {
@@ -26,7 +26,7 @@ namespace Vermeil.UI
 
         public static DependencyObject FindAncestor(this DependencyObject target, Type ancestorType)
         {
-            return target.GetAncestors().FirstOrDefault(ancestorType.IsInstanceOfType);
+            return GetAncestors(target).FirstOrDefault(ancestorType.IsInstanceOfType);
         }
 
         #endregion

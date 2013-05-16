@@ -13,21 +13,21 @@ using Microsoft.Phone.Shell;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     [ContentProperty("Buttons")]
     public class BindableApplicationBar : ItemsControl, IApplicationBar
     {
         public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.RegisterAttached("IsVisible",
-                                                                                                          typeof (bool),
-                                                                                                          typeof (BindableApplicationBar),
-                                                                                                          new PropertyMetadata(true, OnVisibleChanged));
+            typeof (bool),
+            typeof (BindableApplicationBar),
+            new PropertyMetadata(true, OnVisibleChanged));
 
 
         public static readonly DependencyProperty IsMenuEnabledProperty = DependencyProperty.RegisterAttached("IsMenuEnabled",
-                                                                                                              typeof (bool),
-                                                                                                              typeof (BindableApplicationBar),
-                                                                                                              new PropertyMetadata(true, OnEnabledChanged));
+            typeof (bool),
+            typeof (BindableApplicationBar),
+            new PropertyMetadata(true, OnEnabledChanged));
 
         private readonly ApplicationBar _applicationBar;
 
@@ -37,56 +37,16 @@ namespace Vermeil.UI.Controls
             Loaded += ApplicationBarLoaded;
         }
 
-        private void ApplicationBarLoaded(object sender, RoutedEventArgs e)
+        public double BarOpacity
         {
-            var page = this.FindAncestor(typeof (PhoneApplicationPage)) as PhoneApplicationPage;
-            if (page != null)
-            {
-                page.ApplicationBar = _applicationBar;
-            }
-        }
-
-        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
-        {
-            base.OnItemsChanged(e);
-            _applicationBar.Buttons.Clear();
-            _applicationBar.MenuItems.Clear();
-            foreach (BindableApplicationBarIconButton button in Items.Where(c => c is BindableApplicationBarIconButton))
-            {
-                _applicationBar.Buttons.Add(button.Button);
-            }
-            foreach (BindableApplicationBarMenuItem button in Items.Where(c => c is BindableApplicationBarMenuItem))
-            {
-                _applicationBar.MenuItems.Add(button.MenuItem);
-            }
-        }
-
-        private static void OnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != e.OldValue)
-            {
-                ((BindableApplicationBar) d)._applicationBar.IsVisible = (bool) e.NewValue;
-            }
-        }
-
-        private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != e.OldValue)
-            {
-                ((BindableApplicationBar) d)._applicationBar.IsMenuEnabled = (bool) e.NewValue;
-            }
+            get { return _applicationBar.Opacity; }
+            set { _applicationBar.Opacity = value; }
         }
 
         public bool IsVisible
         {
             get { return (bool) GetValue(IsVisibleProperty); }
             set { SetValue(IsVisibleProperty, value); }
-        }
-
-        public double BarOpacity
-        {
-            get { return _applicationBar.Opacity; }
-            set { _applicationBar.Opacity = value; }
         }
 
         public bool IsMenuEnabled
@@ -136,7 +96,47 @@ namespace Vermeil.UI.Controls
         event EventHandler<ApplicationBarStateChangedEventArgs> IApplicationBar.StateChanged
         {
             add { }
-            remove {  }
+            remove { }
+        }
+
+        private void ApplicationBarLoaded(object sender, RoutedEventArgs e)
+        {
+            var page = UIExtensions.FindAncestor(this, typeof (PhoneApplicationPage)) as PhoneApplicationPage;
+            if (page != null)
+            {
+                page.ApplicationBar = _applicationBar;
+            }
+        }
+
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            base.OnItemsChanged(e);
+            _applicationBar.Buttons.Clear();
+            _applicationBar.MenuItems.Clear();
+            foreach (BindableApplicationBarIconButton button in Items.Where(c => c is BindableApplicationBarIconButton))
+            {
+                _applicationBar.Buttons.Add(button.Button);
+            }
+            foreach (BindableApplicationBarMenuItem button in Items.Where(c => c is BindableApplicationBarMenuItem))
+            {
+                _applicationBar.MenuItems.Add(button.MenuItem);
+            }
+        }
+
+        private static void OnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != e.OldValue)
+            {
+                ((BindableApplicationBar) d)._applicationBar.IsVisible = (bool) e.NewValue;
+            }
+        }
+
+        private static void OnEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != e.OldValue)
+            {
+                ((BindableApplicationBar) d)._applicationBar.IsMenuEnabled = (bool) e.NewValue;
+            }
         }
     }
 }

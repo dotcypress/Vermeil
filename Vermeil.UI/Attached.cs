@@ -12,7 +12,7 @@ using Vermeil.Cache;
 
 #endregion
 
-namespace Vermeil.UI
+namespace Vermeil
 {
     public class Attached
     {
@@ -20,9 +20,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty AutoUpdateBindingProperty =
             DependencyProperty.RegisterAttached("AutoUpdateBinding",
-                                                typeof (bool),
-                                                typeof (Attached),
-                                                new PropertyMetadata(OnUpdateSourceTriggerChanged));
+                typeof (bool),
+                typeof (Attached),
+                new PropertyMetadata(OnUpdateSourceTriggerChanged));
 
         public static bool GetAutoUpdateBinding(DependencyObject target)
         {
@@ -87,9 +87,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.RegisterAttached("Command",
-                                                typeof (ICommand),
-                                                typeof (Attached),
-                                                new PropertyMetadata(OnCommandChanged));
+                typeof (ICommand),
+                typeof (Attached),
+                new PropertyMetadata(OnCommandChanged));
 
         public static ICommand GetCommand(DependencyObject dependencyObject)
         {
@@ -117,14 +117,14 @@ namespace Vermeil.UI
             {
                 var selector = dependencyObject as Selector;
                 selector.SelectionChanged += (sender, arg) =>
-                                                 {
-                                                     var list = (Selector) sender;
-                                                     if (arg.AddedItems.Count > 0)
-                                                     {
-                                                         command.Execute(arg.AddedItems[0]);
-                                                     }
-                                                     list.SelectedItem = null;
-                                                 };
+                    {
+                        var list = (Selector) sender;
+                        if (arg.AddedItems.Count > 0)
+                        {
+                            command.Execute(arg.AddedItems[0]);
+                        }
+                        list.SelectedItem = null;
+                    };
             }
             else if (dependencyObject is FrameworkElement)
             {
@@ -139,9 +139,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty ReturnCommandProperty =
             DependencyProperty.RegisterAttached("ReturnCommand",
-                                                typeof (ICommand),
-                                                typeof (Attached),
-                                                new PropertyMetadata(OnReturnCommandChanged));
+                typeof (ICommand),
+                typeof (Attached),
+                new PropertyMetadata(OnReturnCommandChanged));
 
         public static ICommand GetReturnCommand(DependencyObject dependencyObject)
         {
@@ -166,12 +166,12 @@ namespace Vermeil.UI
                 return;
             }
             textBox.KeyUp += (sender, arg) =>
-                                 {
-                                     if (arg.Key == Key.Enter)
-                                     {
-                                         command.Execute(textBox.DataContext);
-                                     }
-                                 };
+                {
+                    if (arg.Key == Key.Enter)
+                    {
+                        command.Execute(textBox.DataContext);
+                    }
+                };
         }
 
         #endregion
@@ -180,9 +180,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty UriSourceProperty =
             DependencyProperty.RegisterAttached("UriSource",
-                                                typeof (Uri),
-                                                typeof (Attached),
-                                                new PropertyMetadata(OnUriSourceChanged));
+                typeof (Uri),
+                typeof (Attached),
+                new PropertyMetadata(OnUriSourceChanged));
 
 
         public static Uri GetUriSource(Image obj)
@@ -206,8 +206,8 @@ namespace Vermeil.UI
             var uri = (Uri) e.NewValue;
             var imageCache = bootstrapper.Container.TryResolve<IImageCache>();
             image.Source = DesignerProperties.IsInDesignTool || imageCache == null
-                               ? new BitmapImage(uri)
-                               : imageCache.Get(uri);
+                ? new BitmapImage(uri)
+                : imageCache.Get(uri);
         }
 
         #endregion
@@ -216,9 +216,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty AutoFocusProperty =
             DependencyProperty.RegisterAttached("AutoFocus",
-                                                typeof (bool),
-                                                typeof (Attached),
-                                                new PropertyMetadata(AutoFocusChanged));
+                typeof (bool),
+                typeof (Attached),
+                new PropertyMetadata(AutoFocusChanged));
 
         public static bool GetAutoFocus(DependencyObject target)
         {
@@ -272,21 +272,21 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty BoundPasswordProperty =
             DependencyProperty.RegisterAttached("BoundPassword",
-                                                typeof (string),
-                                                typeof (Attached),
-                                                new PropertyMetadata(string.Empty, OnBoundPasswordChanged));
+                typeof (string),
+                typeof (Attached),
+                new PropertyMetadata(string.Empty, OnBoundPasswordChanged));
 
         public static readonly DependencyProperty BindPasswordProperty =
             DependencyProperty.RegisterAttached("BindPassword",
-                                                typeof (bool),
-                                                typeof (Attached),
-                                                new PropertyMetadata(false, OnBindPasswordChanged));
+                typeof (bool),
+                typeof (Attached),
+                new PropertyMetadata(false, OnBindPasswordChanged));
 
         private static readonly DependencyProperty UpdatingPasswordProperty =
             DependencyProperty.RegisterAttached("UpdatingPassword",
-                                                typeof (bool),
-                                                typeof (Attached),
-                                                new PropertyMetadata(false));
+                typeof (bool),
+                typeof (Attached),
+                new PropertyMetadata(false));
 
         private static void OnBoundPasswordChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs changedEventArgs)
         {
@@ -371,9 +371,9 @@ namespace Vermeil.UI
 
         public static readonly DependencyProperty WebLinkProperty =
             DependencyProperty.RegisterAttached("WebLink",
-                                                typeof (Uri),
-                                                typeof (Attached),
-                                                new PropertyMetadata(OnWebLinkChanged));
+                typeof (Uri),
+                typeof (Attached),
+                new PropertyMetadata(OnWebLinkChanged));
 
         public static Uri GetWebLink(DependencyObject dependencyObject)
         {
@@ -399,10 +399,10 @@ namespace Vermeil.UI
                 return;
             }
             hyperlinkButton.Click += (sender, arg) =>
-                                         {
-                                             var task = new WebBrowserTask {Uri = uri};
-                                             task.Show();
-                                         };
+                {
+                    var task = new WebBrowserTask {Uri = uri};
+                    task.Show();
+                };
         }
 
         #endregion

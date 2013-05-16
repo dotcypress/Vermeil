@@ -19,8 +19,8 @@ namespace Vermeil.Converters
                 var inverse = parameter != null && parameter.ToString() == "inverse";
                 var isNullOrEmpty = string.IsNullOrWhiteSpace(stringValue);
                 return inverse
-                           ? (isNullOrEmpty ? Visibility.Visible : Visibility.Collapsed)
-                           : (isNullOrEmpty ? Visibility.Collapsed : Visibility.Visible);
+                    ? (isNullOrEmpty ? Visibility.Visible : Visibility.Collapsed)
+                    : (isNullOrEmpty ? Visibility.Collapsed : Visibility.Visible);
             }
             return Visibility.Collapsed;
         }

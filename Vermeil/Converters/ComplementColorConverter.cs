@@ -17,12 +17,12 @@ namespace Vermeil.Converters
             {
                 var color = (Color) value;
                 return new Color
-                           {
-                               R = (byte) (255 - color.R),
-                               G = (byte) (255 - color.G),
-                               B = (byte) (255 - color.B),
-                               A = color.A
-                           };
+                {
+                    R = (byte) (255 - color.R),
+                    G = (byte) (255 - color.G),
+                    B = (byte) (255 - color.B),
+                    A = color.A
+                };
             }
             return null;
         }

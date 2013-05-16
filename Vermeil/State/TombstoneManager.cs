@@ -22,11 +22,11 @@ namespace Vermeil.State
             var viewModelType = viewModel.GetType();
             var properties = GetTombstonedProperties(viewModelType);
             properties.ForEach(x =>
-                                   {
-                                       var value = x.GetValue(viewModel, null);
-                                       var key = string.Format("State.{0}.{1}", viewModelType.Name, x.Name);
-                                       _stateManager.SaveState(key, value);
-                                   });
+                {
+                    var value = x.GetValue(viewModel, null);
+                    var key = string.Format("State.{0}.{1}", viewModelType.Name, x.Name);
+                    _stateManager.SaveState(key, value);
+                });
         }
 
         public void LoadState(object viewModel)
@@ -34,16 +34,16 @@ namespace Vermeil.State
             var viewModelType = viewModel.GetType();
             var properties = GetTombstonedProperties(viewModelType);
             properties.ForEach(x =>
-                                   {
-                                       var value = x.GetValue(viewModel, null);
-                                       var key = string.Format("State.{0}.{1}", viewModelType.Name, x.Name);
-                                       var newValue = _stateManager.LoadState(key, value);
-                                       if (value == newValue)
-                                       {
-                                           return;
-                                       }
-                                       x.SetValue(viewModel, newValue, null);
-                                   });
+                {
+                    var value = x.GetValue(viewModel, null);
+                    var key = string.Format("State.{0}.{1}", viewModelType.Name, x.Name);
+                    var newValue = _stateManager.LoadState(key, value);
+                    if (value == newValue)
+                    {
+                        return;
+                    }
+                    x.SetValue(viewModel, newValue, null);
+                });
             Clear();
         }
 

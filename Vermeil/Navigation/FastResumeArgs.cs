@@ -12,11 +12,11 @@ namespace Vermeil.Navigation
         {
             Uri = uri;
         }
-        
+
         public Uri Uri { get; set; }
-        
+
         public bool PreserveLastOpenedPage { get; set; }
-        
+
         public bool ClearHistory { get; set; }
     }
 }

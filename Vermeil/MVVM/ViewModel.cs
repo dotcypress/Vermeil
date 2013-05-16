@@ -11,19 +11,21 @@ namespace Vermeil.MVVM
     {
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register("Orientation",
-                                        typeof (PageOrientation),
-                                        typeof (ViewModel),
-                                        new PropertyMetadata(PageOrientation.None, OnOrientationChanged));
-
-        private static void OnOrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var model = (ViewModel) d;
-            model.OnOrientationChanged();
-        }
+                typeof (PageOrientation),
+                typeof (ViewModel),
+                new PropertyMetadata(PageOrientation.None, OnOrientationChanged));
 
         internal bool IsCreated;
 
         #region Virtual members
+
+        public FrameworkElement RootElement { get; internal set; }
+
+        public PageOrientation Orientation
+        {
+            get { return (PageOrientation) GetValue(OrientationProperty); }
+            internal set { SetValue(OrientationProperty, value); }
+        }
 
         protected virtual void OnCreate()
         {
@@ -39,14 +41,6 @@ namespace Vermeil.MVVM
 
         protected virtual void OnOrientationChanged()
         {
-        }
-
-        public FrameworkElement RootElement { get; internal set; }
-
-        public PageOrientation Orientation
-        {
-            get { return (PageOrientation) GetValue(OrientationProperty); }
-            internal set { SetValue(OrientationProperty, value); }
         }
 
         #endregion
@@ -69,5 +63,11 @@ namespace Vermeil.MVVM
         }
 
         #endregion
+
+        private static void OnOrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var model = (ViewModel) d;
+            model.OnOrientationChanged();
+        }
     }
 }

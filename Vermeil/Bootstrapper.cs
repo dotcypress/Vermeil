@@ -22,8 +22,8 @@ namespace Vermeil
 {
     public abstract class Bootstrapper : IApplicationService
     {
-        private bool _isFastResume;
         private bool _clearHistory;
+        private bool _isFastResume;
 
         protected Bootstrapper()
         {
@@ -118,7 +118,7 @@ namespace Vermeil
                 _isFastResume = false;
                 var args = new FastResumeArgs(e.Uri);
                 OnFastResume(args);
-                
+
                 if (args.ClearHistory)
                 {
                     _clearHistory = true;

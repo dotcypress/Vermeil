@@ -110,7 +110,7 @@ namespace Vermeil
         }
 
         #endregion
-        
+
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             foreach (var item in items)
@@ -136,7 +136,7 @@ namespace Vermeil
             }
             return char.ToUpper(s[0]) + s.Substring(1);
         }
-        
+
         public static Version GetAppVersion()
         {
             try
@@ -163,7 +163,7 @@ namespace Vermeil
             }
             return default(Version);
         }
-        
+
         internal static int CombineHashCodes(int hash, int anotherHash)
         {
             return (hash << 5) + hash ^ anotherHash;

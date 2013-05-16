@@ -11,9 +11,9 @@ namespace Vermeil.Messaging
     internal class MessagePublisher : IMessagePublisher
     {
         private readonly Dictionary<Type, List<object>> _receivers = new Dictionary<Type, List<object>>();
-        private readonly Dictionary<Type, List<WeakReference>> _weakReceivers = new Dictionary<Type, List<WeakReference>>();
 
         private readonly object _syncLock = new object();
+        private readonly Dictionary<Type, List<WeakReference>> _weakReceivers = new Dictionary<Type, List<WeakReference>>();
 
         public bool IsRegistered<T>(IMessageReceiver<T> receiver) where T : BaseMessage
         {
@@ -97,23 +97,23 @@ namespace Vermeil.Messaging
                 if (_receivers.ContainsKey(recieverMessageType))
                 {
                     _receivers[recieverMessageType].ForEach(x =>
-                                                                {
-                                                                    var reciever = (IMessageReceiver<T>) x;
-                                                                    reciever.OnReceive(message);
-                                                                });
+                        {
+                            var reciever = (IMessageReceiver<T>) x;
+                            reciever.OnReceive(message);
+                        });
                 }
 
                 if (_weakReceivers.ContainsKey(recieverMessageType))
                 {
                     _weakReceivers[recieverMessageType].ForEach(x =>
-                                                                    {
-                                                                        if (!x.IsAlive)
-                                                                        {
-                                                                            return;
-                                                                        }
-                                                                        var receiver = ((IMessageReceiver<T>) x.Target);
-                                                                        receiver.OnReceive(message);
-                                                                    });
+                        {
+                            if (!x.IsAlive)
+                            {
+                                return;
+                            }
+                            var receiver = ((IMessageReceiver<T>) x.Target);
+                            receiver.OnReceive(message);
+                        });
                 }
             }
         }

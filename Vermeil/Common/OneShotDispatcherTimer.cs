@@ -9,18 +9,8 @@ namespace Vermeil.Common
 {
     internal class OneShotDispatcherTimer
     {
-        public event EventHandler Fired;
-
         private TimeSpan _duration = TimeSpan.Zero;
         private DispatcherTimer _timer;
-
-        public static OneShotDispatcherTimer CreateAndStart(TimeSpan duration, EventHandler callback)
-        {
-            var timer = new OneShotDispatcherTimer {Duration = duration};
-            timer.Fired += callback;
-            timer.Start();
-            return timer;
-        }
 
         public TimeSpan Duration
         {
@@ -38,6 +28,16 @@ namespace Vermeil.Common
         public bool IsStarted
         {
             get { return (_timer != null); }
+        }
+
+        public event EventHandler Fired;
+
+        public static OneShotDispatcherTimer CreateAndStart(TimeSpan duration, EventHandler callback)
+        {
+            var timer = new OneShotDispatcherTimer {Duration = duration};
+            timer.Fired += callback;
+            timer.Start();
+            return timer;
         }
 
         private void RaiseFired()

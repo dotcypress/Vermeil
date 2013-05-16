@@ -16,8 +16,8 @@ namespace Vermeil.Converters
             {
                 var valueString = value.ToString();
                 return parameter != null && parameter.ToString() == "lower"
-                           ? valueString.ToLower()
-                           : valueString.ToUpper();
+                    ? valueString.ToLower()
+                    : valueString.ToUpper();
             }
             return null;
         }

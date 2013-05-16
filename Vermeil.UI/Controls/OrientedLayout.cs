@@ -9,15 +9,15 @@ using Microsoft.Phone.Controls;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     public class OrientedLayout : Control
     {
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register("Orientation",
-                                        typeof (PageOrientation),
-                                        typeof (OrientedLayout),
-                                        new PropertyMetadata(PageOrientation.None));
+                typeof (PageOrientation),
+                typeof (OrientedLayout),
+                new PropertyMetadata(PageOrientation.None));
 
 
         public OrientedLayout()
@@ -45,9 +45,9 @@ namespace Vermeil.UI.Controls
                 var orientation = (PageOrientation) value;
                 var inverse = parameter != null && parameter.ToString() == "Landscape";
                 var isPortrait = orientation == PageOrientation.Portrait
-                                 || orientation == PageOrientation.PortraitDown
-                                 || orientation == PageOrientation.PortraitUp
-                                 || orientation == PageOrientation.None;
+                    || orientation == PageOrientation.PortraitDown
+                    || orientation == PageOrientation.PortraitUp
+                    || orientation == PageOrientation.None;
                 if (inverse)
                 {
                     isPortrait = !isPortrait;

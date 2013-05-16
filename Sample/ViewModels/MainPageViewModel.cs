@@ -14,6 +14,9 @@ namespace Sample.ViewModels
 {
     public class MainPageViewModel : ViewModel
     {
+        public static readonly DependencyProperty MyPropertyProperty =
+            DependencyProperty.Register("MyProperty", typeof (string), typeof (MainPageViewModel), new PropertyMetadata(null));
+
         [Tombstoned]
         public string MyProperty
         {
@@ -21,9 +24,19 @@ namespace Sample.ViewModels
             set { SetValue(MyPropertyProperty, value); }
         }
 
-        public static readonly DependencyProperty MyPropertyProperty =
-            DependencyProperty.Register("MyProperty", typeof (string), typeof (MainPageViewModel), new PropertyMetadata(null));
 
+        [Inject]
+        public ILogger Logger { get; set; }
+
+        public ICommand InfoCommand
+        {
+            get { return new RelayCommand<string>(x => Logger.Debug(x), x => !string.IsNullOrWhiteSpace(x)); }
+        }
+
+        public ICommand AboutCommand
+        {
+            get { return new NavigationCommand("/Views/AboutPage.xaml"); }
+        }
 
         protected override void OnCreate()
         {
@@ -38,22 +51,6 @@ namespace Sample.ViewModels
         protected override void OnOrientationChanged()
         {
             Logger.Debug("OnOrientationChanged");
-        }
-
-        [Inject]
-        public ILogger Logger { get; set; }
-
-        public ICommand InfoCommand
-        {
-            get { return new RelayCommand<string>(x => Logger.Debug(x), x => !string.IsNullOrWhiteSpace(x)); }
-        }
-
-        public ICommand AboutCommand
-        {
-            get
-            {
-                return new NavigationCommand("/Views/AboutPage.xaml");
-            }
         }
     }
 }

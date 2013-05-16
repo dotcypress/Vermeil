@@ -7,42 +7,48 @@ using Microsoft.Phone.Shell;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     public class BindableApplicationBarIconButton : FrameworkElement, IApplicationBarIconButton
     {
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command",
-                                                                                                        typeof (ICommand),
-                                                                                                        typeof (BindableApplicationBarIconButton),
-                                                                                                        new PropertyMetadata(CommandChanged));
+            typeof (ICommand),
+            typeof (BindableApplicationBarIconButton),
+            new PropertyMetadata(CommandChanged));
 
 
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter",
-                                                                                                                 typeof (object),
-                                                                                                                 typeof (BindableApplicationBarIconButton),
-                                                                                                                 new PropertyMetadata(CommandParameterChanged));
+            typeof (object),
+            typeof (BindableApplicationBarIconButton),
+            new PropertyMetadata(CommandParameterChanged));
 
 
         public static readonly DependencyProperty CommandParameterValueProperty = DependencyProperty.RegisterAttached("CommandParameterValue",
-                                                                                                                      typeof (object),
-                                                                                                                      typeof (BindableApplicationBarMenuItem),
-                                                                                                                      null);
+            typeof (object),
+            typeof (BindableApplicationBarMenuItem),
+            null);
 
         public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached("IsEnabled",
-                                                                                                          typeof (bool),
-                                                                                                          typeof (BindableApplicationBarIconButton),
-                                                                                                          new PropertyMetadata(true, OnEnabledChanged));
+            typeof (bool),
+            typeof (BindableApplicationBarIconButton),
+            new PropertyMetadata(true, OnEnabledChanged));
 
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
-                                                                                                     typeof (string),
-                                                                                                     typeof (BindableApplicationBarIconButton),
-                                                                                                     new PropertyMetadata(OnTextChanged));
+            typeof (string),
+            typeof (BindableApplicationBarIconButton),
+            new PropertyMetadata(OnTextChanged));
 
         public static readonly DependencyProperty IconUriProperty = DependencyProperty.RegisterAttached("IconUri",
-                                                                                                        typeof (Uri),
-                                                                                                        typeof (BindableApplicationBarIconButton),
-                                                                                                        new PropertyMetadata(OnIconUriChanged));
+            typeof (Uri),
+            typeof (BindableApplicationBarIconButton),
+            new PropertyMetadata(OnIconUriChanged));
+
+        public BindableApplicationBarIconButton()
+        {
+            Button = new ApplicationBarIconButton {Text = "-", IconUri = new Uri("/holder.png", UriKind.Relative)};
+            Button.Click += ApplicationBarIconButtonClick;
+        }
 
         public ICommand Command
         {
@@ -60,6 +66,32 @@ namespace Vermeil.UI.Controls
         {
             get { return GetValue(CommandParameterValueProperty); }
             set { SetValue(CommandParameterValueProperty, value); }
+        }
+
+        public ApplicationBarIconButton Button { get; set; }
+
+        public bool IsEnabled
+        {
+            get { return (bool) GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        public string Text
+        {
+            get { return (string) GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        event EventHandler IApplicationBarMenuItem.Click
+        {
+            add { }
+            remove { }
+        }
+
+        public Uri IconUri
+        {
+            get { return (Uri) GetValue(IconUriProperty); }
+            set { SetValue(IconUriProperty, value); }
         }
 
         private static void CommandChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
@@ -104,18 +136,10 @@ namespace Vermeil.UI.Controls
             if (e.NewValue != e.OldValue)
             {
                 var newValue = (Uri) e.NewValue;
-               ((BindableApplicationBarIconButton) d).Button.IconUri = new Uri(newValue.OriginalString, UriKind.Relative);
+                ((BindableApplicationBarIconButton) d).Button.IconUri = new Uri(newValue.OriginalString, UriKind.Relative);
             }
         }
 
-
-        public ApplicationBarIconButton Button { get; set; }
-
-        public BindableApplicationBarIconButton()
-        {
-            Button = new ApplicationBarIconButton { Text = "-", IconUri = new Uri("/holder.png", UriKind.Relative) };
-            Button.Click += ApplicationBarIconButtonClick;
-        }
 
         private void ApplicationBarIconButtonClick(object sender, EventArgs e)
         {
@@ -127,30 +151,6 @@ namespace Vermeil.UI.Controls
             {
                 Command.Execute(CommandParameterValue);
             }
-        }
-
-        public bool IsEnabled
-        {
-            get { return (bool) GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
-        }
-
-        public string Text
-        {
-            get { return (string) GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
-        }
-
-        event EventHandler IApplicationBarMenuItem.Click
-        {
-            add { }
-            remove {  }
-        }
-
-        public Uri IconUri
-        {
-            get { return (Uri) GetValue(IconUriProperty); }
-            set { SetValue(IconUriProperty, value); }
         }
     }
 }

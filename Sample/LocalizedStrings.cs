@@ -7,7 +7,7 @@ using Sample.Resources;
 namespace Sample
 {
     /// <summary>
-    ///   Provides access to string resources.
+    ///     Provides access to string resources.
     /// </summary>
     public class LocalizedStrings
     {

@@ -133,9 +133,11 @@ namespace Vermeil.IoC
             foreach (var propertyInfo in propertyInfos.Where(x => x.GetCustomAttributes(typeof (InjectAttribute), true).Any()))
             {
                 var fullPropertyName = instance.GetType().FullName + PropertySplitter + propertyInfo.Name;
-                propertyInfo.SetValue(instance, ContainsKey(instance.GetType(), fullPropertyName)
-                                                    ? Resolve(null, fullPropertyName)
-                                                    : Resolve(propertyInfo.PropertyType), null);
+                propertyInfo.SetValue(instance,
+                    ContainsKey(instance.GetType(), fullPropertyName)
+                        ? Resolve(null, fullPropertyName)
+                        : Resolve(propertyInfo.PropertyType),
+                    null);
             }
         }
 
@@ -164,8 +166,8 @@ namespace Vermeil.IoC
                 }
             }
             return ContainsKey(type, key)
-                       ? _resolverHolders.First(x => x.Type == type && x.Key == key).CreationFunction()
-                       : BuildFromType(type);
+                ? _resolverHolders.First(x => x.Type == type && x.Key == key).CreationFunction()
+                : BuildFromType(type);
         }
 
         private bool ContainsKey(Type type, string key)
@@ -192,8 +194,8 @@ namespace Vermeil.IoC
         private object Instantiate(Type type)
         {
             var constructor = type.GetConstructors()
-                .OrderByDescending(c => c.GetParameters().Length)
-                .FirstOrDefault();
+                                  .OrderByDescending(c => c.GetParameters().Length)
+                                  .FirstOrDefault();
             if (constructor == null)
             {
                 throw new IocException("Could not locate a constructor for " + type.FullName);
@@ -202,10 +204,10 @@ namespace Vermeil.IoC
             var parameterInfos = constructor.GetParameters();
             var constructorParams = new List<object>(parameterInfos.Length);
             constructorParams.AddRange(parameterInfos.
-                                           Select(parameterInfo => new {parameterInfo, fullParamName = type.FullName + ConstructorParameterSplitter + parameterInfo.Name}).
-                                           Select(@t => ContainsKey(type, @t.fullParamName)
-                                                            ? Resolve(null, @t.fullParamName)
-                                                            : Resolve(@t.parameterInfo.ParameterType)));
+                Select(parameterInfo => new {parameterInfo, fullParamName = type.FullName + ConstructorParameterSplitter + parameterInfo.Name}).
+                Select(@t => ContainsKey(type, @t.fullParamName)
+                    ? Resolve(null, @t.fullParamName)
+                    : Resolve(@t.parameterInfo.ParameterType)));
             try
             {
                 return constructor.Invoke(constructorParams.ToArray());

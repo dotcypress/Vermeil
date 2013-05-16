@@ -19,10 +19,10 @@ namespace Vermeil.Cache
 {
     internal class ImageCache : IImageCache
     {
-        public static readonly TimeSpan DefaultExpirationDelay = TimeSpan.FromDays(30);
         public const int DefaultMemoryCacheCapacity = 100;
         private const string ImageDataExtension = "data";
         private const string ImageTimestampExtension = "tstamp";
+        public static readonly TimeSpan DefaultExpirationDelay = TimeSpan.FromDays(30);
         private TimeSpan _expirationDelay = DefaultExpirationDelay;
 
         public ImageSource Get(Uri imageUri)
@@ -325,9 +325,10 @@ namespace Vermeil.Cache
                 lock (_storeLock)
                 {
                     var fileStream = Store.OpenFile(imageFilePath,
-                                                    Store.FileExists(imageFilePath)
-                                                        ? FileMode.Create
-                                                        : FileMode.CreateNew, FileAccess.Write);
+                        Store.FileExists(imageFilePath)
+                            ? FileMode.Create
+                            : FileMode.CreateNew,
+                        FileAccess.Write);
                     using (fileStream)
                     {
                         fileStream.Seek(0, SeekOrigin.Begin);
@@ -478,9 +479,10 @@ namespace Vermeil.Cache
                 lock (_storeLock)
                 {
                     var fileStream = Store.OpenFile(timestampFilePath,
-                                                    Store.FileExists(timestampFilePath)
-                                                        ? FileMode.Create
-                                                        : FileMode.CreateNew, FileAccess.Write);
+                        Store.FileExists(timestampFilePath)
+                            ? FileMode.Create
+                            : FileMode.CreateNew,
+                        FileAccess.Write);
                     using (var fileStreamWriter = new StreamWriter(fileStream, Encoding.UTF8))
                     {
                         fileStreamWriter.Write(timestamp.ToUniversalTime().ToString("u"));
@@ -501,8 +503,8 @@ namespace Vermeil.Cache
         private static readonly TimeSpan CachePruningInterval = TimeSpan.FromMinutes(1);
         private static readonly TimeSpan CachePruningTimerDuration = TimeSpan.FromSeconds(5);
 
-        private DateTime _cachePruningTimestamp = DateTime.MinValue;
         private OneShotDispatcherTimer _cachePruningTimer;
+        private DateTime _cachePruningTimestamp = DateTime.MinValue;
 
         private void RequestCachePruning()
         {
@@ -513,13 +515,13 @@ namespace Vermeil.Cache
                     return;
                 }
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
-                                                              {
-                                                                  if (_cachePruningTimer != null)
-                                                                  {
-                                                                      return;
-                                                                  }
-                                                                  _cachePruningTimer = OneShotDispatcherTimer.CreateAndStart(CachePruningTimerDuration, OnCachePruningTimerFired);
-                                                              });
+                    {
+                        if (_cachePruningTimer != null)
+                        {
+                            return;
+                        }
+                        _cachePruningTimer = OneShotDispatcherTimer.CreateAndStart(CachePruningTimerDuration, OnCachePruningTimerFired);
+                    });
             }
         }
 
@@ -544,10 +546,10 @@ namespace Vermeil.Cache
 
         #region Memory Cache
 
-        private readonly object _memoryCacheLock = new object();
-        private int _memoryCacheCapacity = DefaultMemoryCacheCapacity;
-        private readonly Dictionary<string, LinkedListNode<byte[]>> _memoryCacheNodes = new Dictionary<string, LinkedListNode<byte[]>>(DefaultMemoryCacheCapacity);
         private readonly LinkedList<byte[]> _memoryCacheList = new LinkedList<byte[]>();
+        private readonly object _memoryCacheLock = new object();
+        private readonly Dictionary<string, LinkedListNode<byte[]>> _memoryCacheNodes = new Dictionary<string, LinkedListNode<byte[]>>(DefaultMemoryCacheCapacity);
+        private int _memoryCacheCapacity = DefaultMemoryCacheCapacity;
 
         public int MemoryCacheCapacity
         {

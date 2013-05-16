@@ -9,9 +9,9 @@ namespace Vermeil.Cache
 {
     public interface IImageCache
     {
-        ImageSource Get(Uri imageUri);
         TimeSpan ExpirationDelay { get; set; }
         int MemoryCacheCapacity { get; set; }
+        ImageSource Get(Uri imageUri);
         void Cleanup();
         void Clear();
     }

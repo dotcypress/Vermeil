@@ -1,7 +1,5 @@
 ﻿#region
 
-using Sample.ViewModels;
-using Sample.Views;
 using Vermeil;
 using Vermeil.Logging;
 

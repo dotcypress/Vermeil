@@ -7,32 +7,38 @@ using Microsoft.Phone.Shell;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     public class BindableApplicationBarMenuItem : FrameworkElement, IApplicationBarMenuItem
     {
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command",
-                                                                                                        typeof (ICommand),
-                                                                                                        typeof (BindableApplicationBarMenuItem),
-                                                                                                        new PropertyMetadata(CommandChanged));
+            typeof (ICommand),
+            typeof (BindableApplicationBarMenuItem),
+            new PropertyMetadata(CommandChanged));
 
 
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter",
-                                                                                                                 typeof (object),
-                                                                                                                 typeof (BindableApplicationBarMenuItem),
-                                                                                                                 new PropertyMetadata(CommandParameterChanged));
+            typeof (object),
+            typeof (BindableApplicationBarMenuItem),
+            new PropertyMetadata(CommandParameterChanged));
 
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
-                                                                                                     typeof (string),
-                                                                                                     typeof (BindableApplicationBarMenuItem),
-                                                                                                     new PropertyMetadata(OnTextChanged));
+            typeof (string),
+            typeof (BindableApplicationBarMenuItem),
+            new PropertyMetadata(OnTextChanged));
 
 
         public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached("IsEnabled",
-                                                                                                          typeof (bool),
-                                                                                                          typeof (BindableApplicationBarMenuItem),
-                                                                                                          new PropertyMetadata(true, OnEnabledChanged));
+            typeof (bool),
+            typeof (BindableApplicationBarMenuItem),
+            new PropertyMetadata(true, OnEnabledChanged));
+
+        public BindableApplicationBarMenuItem()
+        {
+            MenuItem = new ApplicationBarMenuItem {Text = "-"};
+            MenuItem.Click += ApplicationBarMenuItemClick;
+        }
 
 
         public ICommand Command
@@ -45,6 +51,26 @@ namespace Vermeil.UI.Controls
         {
             get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
+        }
+
+        public ApplicationBarMenuItem MenuItem { get; set; }
+
+        public bool IsEnabled
+        {
+            get { return (bool) GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        public string Text
+        {
+            get { return (string) GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        event EventHandler IApplicationBarMenuItem.Click
+        {
+            add { }
+            remove { }
         }
 
         private static void CommandChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
@@ -84,38 +110,12 @@ namespace Vermeil.UI.Controls
             }
         }
 
-        public ApplicationBarMenuItem MenuItem { get; set; }
-
-        public BindableApplicationBarMenuItem()
-        {
-            MenuItem = new ApplicationBarMenuItem {Text = "-"};
-            MenuItem.Click += ApplicationBarMenuItemClick;
-        }
-
         private void ApplicationBarMenuItemClick(object sender, EventArgs e)
         {
             if (Command != null)
             {
                 Command.Execute(CommandParameter);
             }
-        }
-
-        public bool IsEnabled
-        {
-            get { return (bool) GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
-        }
-
-        public string Text
-        {
-            get { return (string) GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
-        }
-
-        event EventHandler IApplicationBarMenuItem.Click
-        {
-            add {}
-            remove {  }
         }
     }
 }

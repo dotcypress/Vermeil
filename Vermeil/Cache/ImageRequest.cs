@@ -122,21 +122,21 @@ namespace Vermeil.Cache
                 _webRequest = null;
 
                 ThreadPool.QueueUserWorkItem(state =>
-                                                 {
-                                                     if (Completed == null)
-                                                     {
-                                                         return;
-                                                     }
-                                                     try
-                                                     {
-                                                         Completed(this, EventArgs.Empty);
-                                                     }
-                                                         // ReSharper disable EmptyGeneralCatchClause
-                                                     catch (Exception)
-                                                         // ReSharper restore EmptyGeneralCatchClause
-                                                     {
-                                                     }
-                                                 });
+                    {
+                        if (Completed == null)
+                        {
+                            return;
+                        }
+                        try
+                        {
+                            Completed(this, EventArgs.Empty);
+                        }
+                            // ReSharper disable EmptyGeneralCatchClause
+                        catch (Exception)
+                            // ReSharper restore EmptyGeneralCatchClause
+                        {
+                        }
+                    });
             }
         }
     }

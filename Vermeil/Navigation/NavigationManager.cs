@@ -13,8 +13,8 @@ namespace Vermeil.Navigation
     internal class NavigationManager : INavigationManager
     {
         private readonly PhoneApplicationFrame _rootFrame;
-        private object _backState;
         private readonly object _syncRoot = new object();
+        private object _backState;
 
         public NavigationManager(PhoneApplicationFrame rootFrame)
         {

@@ -164,6 +164,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vermeil.UI\Vermeil.UI.csproj">
+      <Project>{8B15CDA3-6F4A-4F11-9969-697C1CF52EFE}</Project>
+      <Name>Vermeil.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vermeil\Vermeil.csproj">
       <Project>{2F0B89D2-B88A-4E5D-B879-7644D4A3B407}</Project>
       <Name>Vermeil</Name>

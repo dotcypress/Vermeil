@@ -31,6 +31,8 @@ namespace Vermeil.Commands
             }
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public void OnCanExecutedChanged()
         {
             if (CanExecuteChanged != null)
@@ -38,7 +40,5 @@ namespace Vermeil.Commands
                 CanExecuteChanged(this, new EventArgs());
             }
         }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

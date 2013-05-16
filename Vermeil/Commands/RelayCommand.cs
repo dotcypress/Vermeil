@@ -9,8 +9,8 @@ namespace Vermeil.Commands
 {
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> _execute;
         private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _execute;
 
         public RelayCommand(Action<T> execute)
             : this(execute, x => true)
@@ -33,6 +33,8 @@ namespace Vermeil.Commands
             _execute.Invoke((T) parameter);
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public void OnCanExecutedChanged()
         {
             if (CanExecuteChanged != null)
@@ -40,7 +42,5 @@ namespace Vermeil.Commands
                 CanExecuteChanged(this, new EventArgs());
             }
         }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

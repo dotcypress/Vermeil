@@ -5,9 +5,9 @@
                             xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                            xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" 
-                            xmlns:VermeilControls="clr-namespace:Vermeil.Controls;assembly=Vermeil"
-                            xmlns:Vermeil="clr-namespace:Vermeil;assembly=Vermeil"
+                            xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+                            xmlns:vermeil="clr-namespace:Vermeil;assembly=Vermeil.UI" 
+                            xmlns:controls="clr-namespace:Vermeil.Controls;assembly=Vermeil.UI"
                             mc:Ignorable="d"
                             FontFamily="{StaticResource PhoneFontFamilyNormal}"
                             FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -28,7 +28,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Margin="12,0,12,0">
-            <TextBox Vermeil:Attached.AutoUpdateBinding="True" Text="{Binding MyProperty, Mode=TwoWay}" VerticalAlignment="Top" />
+            <TextBox vermeil:Attached.AutoUpdateBinding="True" Text="{Binding MyProperty, Mode=TwoWay}" VerticalAlignment="Top" />
             <Button Content="tap me" />
             <TextBlock Text="{Binding MyProperty, Mode=TwoWay}" VerticalAlignment="Top" />
 
@@ -36,15 +36,15 @@
 
         <Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />
 
-        <VermeilControls:BindableApplicationBar IsVisible="{Binding ShowMenu}">
-            <VermeilControls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Select.png"
+        <controls:BindableApplicationBar IsVisible="{Binding ShowMenu}">
+            <controls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Select.png"
                                                               Text="info"
                                                               Command="{Binding InfoCommand}"
                                                               CommandParameter="{Binding MyProperty}" />
-            <VermeilControls:BindableApplicationBar.MenuItems>
-                <VermeilControls:BindableApplicationBarMenuItem Text="about" 
+            <controls:BindableApplicationBar.MenuItems>
+                <controls:BindableApplicationBarMenuItem Text="about"
                                                                 Command="{Binding AboutCommand}" />
-            </VermeilControls:BindableApplicationBar.MenuItems>
-        </VermeilControls:BindableApplicationBar>
+            </controls:BindableApplicationBar.MenuItems>
+        </controls:BindableApplicationBar>
     </Grid>
 </phone:PhoneApplicationPage>

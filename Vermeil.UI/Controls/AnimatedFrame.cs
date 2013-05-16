@@ -10,19 +10,43 @@ using Microsoft.Phone.Controls;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     public class AnimatedFrame : TransitionFrame
     {
-        private readonly RotateTransform _rotateTransform = new RotateTransform();
-        private readonly TranslateTransform _translateTransform = new TranslateTransform();
-        private readonly Storyboard _progressStoryboard = new Storyboard();
-        private readonly DoubleAnimation _progressAnimation = new DoubleAnimation();
+        /// <summary>
+        ///     Identifies the IsAnimationEnabled DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty IsAnimationEnabledProperty =
+            DependencyProperty.Register("IsAnimationEnabled", typeof (bool), typeof (AnimatedFrame), new PropertyMetadata(true));
+
+        /// <summary>
+        ///     Identifies the Duration DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty DurationProperty =
+            DependencyProperty.Register("Duration", typeof (TimeSpan), typeof (AnimatedFrame), new PropertyMetadata(TimeSpan.FromSeconds(0.5)));
+
+        /// <summary>
+        ///     Identifies the EasingFunction DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty EasingFunctionProperty =
+            DependencyProperty.Register("EasingFunction", typeof (IEasingFunction), typeof (AnimatedFrame), new PropertyMetadata(null));
+
+        /// <summary>
+        ///     Identifies the Progress DependencyProperty.
+        /// </summary>
+        private static readonly DependencyProperty ProgressProperty =
+            DependencyProperty.Register("Progress", typeof (double), typeof (AnimatedFrame), new PropertyMetadata(0.0, OnProgressChanged));
+
         private readonly OrientationState _from = new OrientationState();
+        private readonly DoubleAnimation _progressAnimation = new DoubleAnimation();
+        private readonly Storyboard _progressStoryboard = new Storyboard();
+        private readonly RotateTransform _rotateTransform = new RotateTransform();
         private readonly OrientationState _to = new OrientationState();
+        private readonly TranslateTransform _translateTransform = new TranslateTransform();
         private UIElement _clientArea;
-        private Size _lastSize;
         private bool _handledSizeChanged;
+        private Size _lastSize;
 
         public AnimatedFrame()
         {
@@ -69,12 +93,6 @@ namespace Vermeil.UI.Controls
         }
 
         /// <summary>
-        ///     Identifies the IsAnimationEnabled DependencyProperty.
-        /// </summary>
-        public static readonly DependencyProperty IsAnimationEnabledProperty =
-            DependencyProperty.Register("IsAnimationEnabled", typeof (bool), typeof (AnimatedFrame), new PropertyMetadata(true));
-
-        /// <summary>
         ///     Gets or sets a value indicating the duration of the orientation change animation.
         /// </summary>
         public TimeSpan Duration
@@ -84,12 +102,6 @@ namespace Vermeil.UI.Controls
         }
 
         /// <summary>
-        ///     Identifies the Duration DependencyProperty.
-        /// </summary>
-        public static readonly DependencyProperty DurationProperty =
-            DependencyProperty.Register("Duration", typeof (TimeSpan), typeof (AnimatedFrame), new PropertyMetadata(TimeSpan.FromSeconds(0.5)));
-
-        /// <summary>
         ///     Gets or sets a value indicating the IEasingFunction to use for the orientation change animation.
         /// </summary>
         public IEasingFunction EasingFunction
@@ -97,18 +109,6 @@ namespace Vermeil.UI.Controls
             get { return (IEasingFunction) GetValue(EasingFunctionProperty); }
             set { SetValue(EasingFunctionProperty, value); }
         }
-
-        /// <summary>
-        ///     Identifies the EasingFunction DependencyProperty.
-        /// </summary>
-        public static readonly DependencyProperty EasingFunctionProperty =
-            DependencyProperty.Register("EasingFunction", typeof (IEasingFunction), typeof (AnimatedFrame), new PropertyMetadata(null));
-
-        /// <summary>
-        ///     Identifies the Progress DependencyProperty.
-        /// </summary>
-        private static readonly DependencyProperty ProgressProperty =
-            DependencyProperty.Register("Progress", typeof (double), typeof (AnimatedFrame), new PropertyMetadata(0.0, OnProgressChanged));
 
         /// <summary>
         ///     Handles changes to the Progress property.

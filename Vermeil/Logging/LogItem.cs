@@ -24,8 +24,8 @@ namespace Vermeil.Logging
         public override string ToString()
         {
             return (Exception == null
-                        ? string.Format("[{0}]\t: {1}\t > {2}", DateTime.Now, LogType, Message)
-                        : string.Format("[{0}]\t: {1}\t > {2}\n--------\n{3}\n--------", DateTime.Now, LogType, Message, Exception));
+                ? string.Format("[{0}]\t: {1}\t > {2}", DateTime.Now, LogType, Message)
+                : string.Format("[{0}]\t: {1}\t > {2}\n--------\n{3}\n--------", DateTime.Now, LogType, Message, Exception));
         }
     }
 }

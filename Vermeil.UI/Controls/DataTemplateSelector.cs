@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 #endregion
 
-namespace Vermeil.UI.Controls
+namespace Vermeil.Controls
 {
     public abstract class DataTemplateSelector : ContentControl
     {
