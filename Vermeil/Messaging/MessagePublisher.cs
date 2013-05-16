@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Vermeil.Messaging
 {
-    internal class MessagePublisher : IMessagePublisher
+    public class MessagePublisher : IMessagePublisher
     {
         private readonly Dictionary<Type, List<object>> _receivers = new Dictionary<Type, List<object>>();
 

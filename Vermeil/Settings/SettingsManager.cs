@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Vermeil.Settings
 {
-    internal class SettingsManager : ISettingsManager
+    public class SettingsManager : ISettingsManager
     {
         private readonly IsolatedStorageSettings _isolatedStore;
 

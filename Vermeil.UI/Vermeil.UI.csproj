@@ -86,12 +86,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attached.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Cache\IImageCache.cs" />
+    <Compile Include="Cache\ImageCache.cs" />
+    <Compile Include="Cache\ImageRequest.cs" />
+    <Compile Include="Commands\NavigationCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Common\OneShotDispatcherTimer.cs" />
     <Compile Include="Controls\AnimatedFrame.cs" />
     <Compile Include="Controls\BindableApplicationBar.cs" />
     <Compile Include="Controls\BindableApplicationBarIconButton.cs" />
     <Compile Include="Controls\BindableApplicationBarMenuItem.cs" />
     <Compile Include="Controls\DataTemplateSelector.cs" />
     <Compile Include="Controls\OrientedLayout.cs" />
+    <Compile Include="MVVM\NavigationParamAttribute.cs" />
+    <Compile Include="MVVM\ViewModel.cs" />
+    <Compile Include="MVVM\ViewModelMap.cs" />
+    <Compile Include="Navigation\FastResumeArgs.cs" />
+    <Compile Include="Navigation\INavigationManager.cs" />
+    <Compile Include="Navigation\NavigationManager.cs" />
+    <Compile Include="Navigation\PageQuery.cs" />
+    <Compile Include="State\IStateManager.cs" />
+    <Compile Include="State\StateManager.cs" />
+    <Compile Include="State\TombstonedAttribute.cs" />
+    <Compile Include="State\TombstoneManager.cs" />
     <Compile Include="UIExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -105,8 +123,9 @@
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPtoolkit.4.2012.10.30\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Vermeil">
-      <HintPath>..\packages\Vermeil.2.0.0\lib\windowsphone8\Vermeil.dll</HintPath>
+    <Reference Include="Vermeil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Vermeil.2.1.3\lib\windowsphone8\Vermeil.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
