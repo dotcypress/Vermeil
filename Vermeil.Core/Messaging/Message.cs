@@ -1,4 +1,4 @@
-﻿namespace Vermeil.Messaging
+﻿namespace Vermeil.Core.Messaging
 {
     public class Message<T> : BaseMessage
     {

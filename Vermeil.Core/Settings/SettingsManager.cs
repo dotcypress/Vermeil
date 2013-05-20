@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 #endregion
 
-namespace Vermeil.Settings
+namespace Vermeil.Core.Settings
 {
     public class SettingsManager : ISettingsManager
     {

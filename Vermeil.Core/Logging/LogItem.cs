@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Vermeil.Logging
+namespace Vermeil.Core.Logging
 {
     internal class LogItem
     {

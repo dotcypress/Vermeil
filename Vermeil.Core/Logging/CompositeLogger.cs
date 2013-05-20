@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Vermeil.Logging
+namespace Vermeil.Core.Logging
 {
     public class CompositeLogger : ILogger
     {

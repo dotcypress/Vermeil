@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Vermeil.UI")]
+[assembly: AssemblyTitle("Vermeil.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Vermeil.UI")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("Vermeil.Core")]
+[assembly: AssemblyCopyright("Vitaly Domnikov ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("8b15cda3-6f4a-4f11-9969-697c1cf52efe")]
+[assembly: Guid("2f0b89d2-b88a-4e5d-b879-7644d4a3b407")]
 
 // Version information for an assembly consists of the following four values:
 //

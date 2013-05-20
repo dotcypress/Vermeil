@@ -5,15 +5,11 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Vermeil.IoC
+namespace Vermeil.Core.IoC
 {
     internal class ObjectHolder : IEquatable<ObjectHolder>
     {
-        public ObjectHolder(Type type, string key) : this(type, key, null)
-        {
-        }
-
-        public ObjectHolder(Type type, string key, Func<object> creationFunction)
+        public ObjectHolder(Type type, string key, Func<object> creationFunction = null)
             : this(type, key, creationFunction, false)
         {
         }

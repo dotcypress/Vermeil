@@ -1,4 +1,4 @@
-﻿namespace Vermeil.Messaging
+﻿namespace Vermeil.Core.Messaging
 {
     public abstract class BaseMessage
     {
@@ -7,6 +7,6 @@
             Sender = sender;
         }
 
-        public object Sender { get; set; }
+        protected object Sender { get; set; }
     }
 }

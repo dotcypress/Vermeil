@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 #endregion
 
-namespace Vermeil.IoC
+namespace Vermeil.Core.IoC
 {
     public class IocContainer
     {

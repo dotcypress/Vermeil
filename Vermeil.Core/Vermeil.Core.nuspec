@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Vermeil.UI</id>
-    <version>2.5.0</version>
+    <id>Vermeil.Core</id>
+    <version>3.0.0</version>
     <authors>Vitaly Domnikov</authors>
     <owners>Vitaly Domnikov</owners>
     <licenseUrl>https://github.com/dotCypress/Vermeil</licenseUrl>
@@ -10,13 +10,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple Windows Phone 8 MVVM toolkit</description>
     <copyright>2013 © Vitaly Domnikov</copyright>
-    <tags>WP8 MVVM</tags>
-    <dependencies>
-      <dependency id="Vermeil" version="2.5.0" />
-      <dependency id="WPtoolkit" version="4.2012.10.30" />
-    </dependencies>
+    <tags>WP8 IOC PubSup</tags>
   </metadata>
   <files>
-    <file src="bin\Release\Vermeil.UI.dll" target="lib\windowsphone8" />
+    <file src="bin\Release\Vermeil.Core.dll" target="lib\windowsphone8" />
   </files>
 </package>

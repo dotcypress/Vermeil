@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Vermeil.IoC
+namespace Vermeil.Core.IoC
 {
     public class IocException : Exception
     {

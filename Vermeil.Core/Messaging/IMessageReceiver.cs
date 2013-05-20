@@ -1,4 +1,4 @@
-﻿namespace Vermeil.Messaging
+﻿namespace Vermeil.Core.Messaging
 {
 // ReSharper disable TypeParameterCanBeVariant
     public interface IMessageReceiver<T> where T : BaseMessage

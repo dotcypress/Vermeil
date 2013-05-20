@@ -1,7 +1,7 @@
 ﻿#region
 
 using Vermeil;
-using Vermeil.Logging;
+using Vermeil.Core.Logging;
 
 #endregion
 
@@ -12,8 +12,6 @@ namespace Sample
         protected override void Init()
         {
             Container.Register<ILogger, DebugLogger>();
-
-
             Container.Resolve<ILogger>().Debug("Init complete");
         }
     }

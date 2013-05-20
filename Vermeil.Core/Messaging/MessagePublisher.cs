@@ -6,7 +6,7 @@ using System.Linq;
 
 #endregion
 
-namespace Vermeil.Messaging
+namespace Vermeil.Core.Messaging
 {
     public class MessagePublisher : IMessagePublisher
     {

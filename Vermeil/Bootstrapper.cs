@@ -8,12 +8,12 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Vermeil.Cache;
-using Vermeil.IoC;
-using Vermeil.Logging;
+using Vermeil.Core.IoC;
+using Vermeil.Core.Logging;
+using Vermeil.Core.Messaging;
+using Vermeil.Core.Settings;
 using Vermeil.MVVM;
-using Vermeil.Messaging;
 using Vermeil.Navigation;
-using Vermeil.Settings;
 using Vermeil.State;
 
 #endregion

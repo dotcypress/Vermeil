@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vermeil", "Vermeil\Vermeil.csproj", "{2F0B89D2-B88A-4E5D-B879-7644D4A3B407}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vermeil.Core", "Vermeil.Core\Vermeil.Core.csproj", "{2F0B89D2-B88A-4E5D-B879-7644D4A3B407}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{D28EE25B-0A2D-4946-BB28-EFA6509B307E}"
 EndProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6B9742
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vermeil.UI", "Vermeil.UI\Vermeil.UI.csproj", "{8B15CDA3-6F4A-4F11-9969-697C1CF52EFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vermeil", "Vermeil\Vermeil.csproj", "{8B15CDA3-6F4A-4F11-9969-697C1CF52EFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
