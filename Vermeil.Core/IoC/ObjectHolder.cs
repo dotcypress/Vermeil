@@ -45,7 +45,7 @@ namespace Vermeil.Core.IoC
         public override int GetHashCode()
         {
             var comparer = EqualityComparer<object>.Default;
-            return Extensions.CombineHashCodes(comparer.GetHashCode(Type), comparer.GetHashCode(Key));
+            return CombineHashCodes(comparer.GetHashCode(Type), comparer.GetHashCode(Key));
         }
 
         public override bool Equals(object obj)
@@ -54,6 +54,11 @@ namespace Vermeil.Core.IoC
             var typeComparer = EqualityComparer<Type>.Default;
             var keyComparer = EqualityComparer<string>.Default;
             return t != null && typeComparer.Equals(Type, t.Type) && keyComparer.Equals(Key, t.Key);
+        }
+
+        private static int CombineHashCodes(int hash, int anotherHash)
+        {
+            return (hash << 5) + hash ^ anotherHash;
         }
     }
 }

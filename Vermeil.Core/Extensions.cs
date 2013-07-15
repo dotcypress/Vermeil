@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 
 #endregion
 
-namespace Vermeil
+namespace Vermeil.Core
 {
     public static class Extensions
     {
@@ -18,9 +17,10 @@ namespace Vermeil
         {
             var lambda = (LambdaExpression) property;
             MemberExpression memberExpression;
-            if (lambda.Body is UnaryExpression)
+            var body = lambda.Body as UnaryExpression;
+            if (body != null)
             {
-                var unaryExpression = (UnaryExpression) lambda.Body;
+                var unaryExpression = body;
                 memberExpression = (MemberExpression) unaryExpression.Operand;
             }
             else
@@ -34,9 +34,10 @@ namespace Vermeil
         {
             var lambda = (LambdaExpression) property;
             MemberExpression memberExpression;
-            if (lambda.Body is UnaryExpression)
+            var body = lambda.Body as UnaryExpression;
+            if (body != null)
             {
-                var unaryExpression = (UnaryExpression) lambda.Body;
+                var unaryExpression = body;
                 memberExpression = (MemberExpression) unaryExpression.Operand;
             }
             else
@@ -90,6 +91,8 @@ namespace Vermeil
 
         #endregion
 
+        #region Collections
+
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             foreach (var item in items)
@@ -97,6 +100,10 @@ namespace Vermeil
                 action(item);
             }
         }
+
+        #endregion
+
+        #region Strings
 
         public static string Ellipsize(this string input, int maxLenght)
         {
@@ -107,45 +114,57 @@ namespace Vermeil
             return input;
         }
 
-        public static string UppercaseFirst(this string s)
+        public static string Capitalize(this string input)
         {
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrWhiteSpace(input))
             {
                 return string.Empty;
             }
-            return char.ToUpper(s[0]) + s.Substring(1);
+            return char.ToUpper(input[0]) + input.Substring(1);
         }
 
-        public static Version GetAppVersion()
+        #endregion
+
+        #region Helpers
+
+        public static TResult With<TInput, TResult>(this TInput input, Func<TInput, TResult> evaluator) where TResult : class where TInput : class
         {
-            try
-            {
-                var doc = XDocument.Load("WMAppManifest.xml");
-                var xAttribute = doc.Descendants("App").First().Attribute("Version");
-                if (xAttribute != null)
-                {
-                    var version = xAttribute.Value;
-                    if (!string.IsNullOrEmpty(version))
-                    {
-                        Version result;
-                        if (Version.TryParse(version, out result))
-                        {
-                            return result;
-                        }
-                    }
-                }
-            }
-// ReSharper disable EmptyGeneralCatchClause
-            catch
-// ReSharper restore EmptyGeneralCatchClause
-            {
-            }
-            return default(Version);
+            return input == null ? null : evaluator(input);
         }
 
-        internal static int CombineHashCodes(int hash, int anotherHash)
+        public static TResult Return<TInput, TResult>(this TInput input, Func<TInput, TResult> evaluator, TResult failureValue) where TInput : class
         {
-            return (hash << 5) + hash ^ anotherHash;
+            return input == null ? failureValue : evaluator(input);
         }
+
+        public static TInput If<TInput>(this TInput input, Func<TInput, bool> evaluator) where TInput : class
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            return evaluator(input) ? input : null;
+        }
+
+        public static TInput Unless<TInput>(this TInput input, Func<TInput, bool> evaluator) where TInput : class
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            return evaluator(input) ? null : input;
+        }
+
+        public static TInput Do<TInput>(this TInput input, Action<TInput> action) where TInput : class
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            action(input);
+            return input;
+        }
+
+        #endregion
     }
 }
