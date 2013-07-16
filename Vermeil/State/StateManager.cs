@@ -3,6 +3,7 @@
 using System;
 using System.Linq.Expressions;
 using Microsoft.Phone.Shell;
+using Vermeil.Core;
 
 #endregion
 

@@ -11,6 +11,7 @@ namespace Sample
     {
         protected override void Init()
         {
+            Container.Register<ILogger, NullLogger>("silent");
             Container.Register<ILogger, DebugLogger>();
             Container.Resolve<ILogger>().Debug("Init complete");
         }

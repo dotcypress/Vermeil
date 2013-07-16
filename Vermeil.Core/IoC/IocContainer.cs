@@ -130,13 +130,18 @@ namespace Vermeil.Core.IoC
         public void BuildUp(object instance)
         {
             var propertyInfos = instance.GetType().GetProperties();
-            foreach (var propertyInfo in propertyInfos.Where(x => x.GetCustomAttributes(typeof (InjectAttribute), true).Any()))
+            foreach (var propertyInfo in propertyInfos)
             {
+                var injectAttribute = propertyInfo.GetCustomAttributes(typeof (InjectAttribute), true).FirstOrDefault() as InjectAttribute;
+                if (injectAttribute == null)
+                {
+                    continue;
+                }
                 var fullPropertyName = instance.GetType().FullName + PropertySplitter + propertyInfo.Name;
                 propertyInfo.SetValue(instance,
                     ContainsKey(instance.GetType(), fullPropertyName)
                         ? Resolve(null, fullPropertyName)
-                        : Resolve(propertyInfo.PropertyType),
+                        : Resolve(propertyInfo.PropertyType, injectAttribute.Key),
                     null);
             }
         }

@@ -24,9 +24,11 @@ namespace Sample.ViewModels
             set { SetValue(MyPropertyProperty, value); }
         }
 
-
         [Inject]
         public ILogger Logger { get; set; }
+
+        [Inject("silent")]
+        public ILogger SilentLogger { get; set; }
 
         public ICommand InfoCommand
         {
@@ -41,6 +43,7 @@ namespace Sample.ViewModels
         protected override void OnCreate()
         {
             Logger.Debug("OnCreate");
+            SilentLogger.Debug("Write log message to parallel universe :)");
         }
 
         protected override void OnLoad()
