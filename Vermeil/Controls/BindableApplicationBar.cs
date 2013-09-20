@@ -101,7 +101,7 @@ namespace Vermeil.Controls
 
         private void ApplicationBarLoaded(object sender, RoutedEventArgs e)
         {
-            var page = this.FindAncestor(typeof (PhoneApplicationPage)) as PhoneApplicationPage;
+            var page = this.FindAncestorWithType<PhoneApplicationPage>();
             if (page != null)
             {
                 page.ApplicationBar = _applicationBar;

@@ -24,9 +24,9 @@ namespace Vermeil
             }
         }
 
-        public static DependencyObject FindAncestor(this DependencyObject target, Type ancestorType)
+        public static T FindAncestorWithType<T>(this DependencyObject target) where T : class
         {
-            return GetAncestors(target).FirstOrDefault(ancestorType.IsInstanceOfType);
+            return GetAncestors(target).FirstOrDefault(typeof(T).IsInstanceOfType) as T;
         }
 
         #endregion

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Phone.Tasks;
 using Vermeil.Cache;
@@ -406,5 +407,77 @@ namespace Vermeil
         }
 
         #endregion
+
+        #region Animation Trigger
+
+        public static readonly DependencyProperty AnimationTriggerProperty =
+            DependencyProperty.RegisterAttached("AnimationTrigger", typeof(object), typeof(Attached), new PropertyMetadata(AnimationTriggerChanged));
+
+        public static bool GetAnimationTrigger(DependencyObject target)
+        {
+            return (bool)target.GetValue(AnimationTriggerProperty);
+        }
+
+        public static void SetAnimationTrigger(DependencyObject target, bool value)
+        {
+            target.SetValue(AnimationTriggerProperty, value);
+        }
+
+        private static void AnimationTriggerChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            var storyboard = target as Storyboard;
+            if (storyboard == null || !(e.NewValue is bool))
+            {
+                return;
+            }
+            storyboard.Begin();
+        }
+
+        #endregion
+
+        #region Animation Conroller
+
+        public static readonly DependencyProperty AnimationConrollerProperty =
+            DependencyProperty.RegisterAttached("AnimationConroller", typeof(bool), typeof(Attached), new PropertyMetadata(AnimationConrollerChanged));
+
+        public static bool GetAnimationConroller(DependencyObject target)
+        {
+            return (bool)target.GetValue(AnimationConrollerProperty);
+        }
+
+        public static void SetAnimationConroller(DependencyObject target, bool value)
+        {
+            target.SetValue(AnimationConrollerProperty, value);
+        }
+
+        private static void AnimationConrollerChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            var storyboard = target as Storyboard;
+
+            if (storyboard == null || !(e.NewValue is bool))
+            {
+                return;
+            }
+
+            if ((bool)e.NewValue)
+            {
+                storyboard.Stop();
+                storyboard.AutoReverse = false;
+                storyboard.Begin();
+            }
+            else
+            {
+                storyboard.AutoReverse = true;
+                var time = storyboard.GetCurrentTime();
+                storyboard.Stop();
+                storyboard.Begin();
+                storyboard.SeekAlignedToLastTick(time);
+            }
+        }
+
+        #endregion
+
+
+
     }
 }
