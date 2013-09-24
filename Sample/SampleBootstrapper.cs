@@ -2,6 +2,7 @@
 
 using Vermeil;
 using Vermeil.Core.Logging;
+using Vermeil.Notify;
 
 #endregion
 

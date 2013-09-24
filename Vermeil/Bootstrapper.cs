@@ -8,346 +8,340 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Vermeil.Cache;
+using Vermeil.Core;
 using Vermeil.Core.IoC;
 using Vermeil.Core.Logging;
 using Vermeil.Core.Messaging;
 using Vermeil.Core.Settings;
 using Vermeil.MVVM;
 using Vermeil.Navigation;
+using Vermeil.Notify;
 using Vermeil.State;
 
 #endregion
 
 namespace Vermeil
 {
-    public abstract class Bootstrapper : IApplicationService
-    {
-        private bool _clearHistory;
-        private bool _isFastResume;
+	public abstract class Bootstrapper : IApplicationService
+	{
+		private bool _clearHistory;
+		private bool _isFastResume;
 
-        protected Bootstrapper()
-        {
-            Container = new IocContainer();
-            ViewModelMap = new ViewModelMap();
-            InitRootFrame();
-            InitContainer();
-            InitPhoneServices();
-            InitMvvm();
-            Current = this;
-        }
+		protected Bootstrapper()
+		{
+			Container = new IocContainer();
+			ViewModelMap = new ViewModelMap();
+			InitRootFrame();
+			InitContainer();
+			InitPhoneServices();
+			InitMvvm();
+			Current = this;
+		}
 
-        #region Init
+		#region Init
 
-        private void InitRootFrame()
-        {
-            Container.RegisterInstance(CreateRootFrame());
-        }
+		private void InitRootFrame()
+		{
+			Container.RegisterInstance(CreateRootFrame());
+		}
 
-        private void InitContainer()
-        {
-            Container.RegisterInstance<PhoneApplicationService>();
-            Container.RegisterInstance<ILogger, NullLogger>();
-            Container.RegisterInstance<IMessagePublisher, MessagePublisher>();
-            Container.RegisterInstance<INavigationManager, NavigationManager>();
-            Container.RegisterInstance<ISettingsManager, SettingsManager>();
-            Container.RegisterInstance<IStateManager, StateManager>();
-            Container.RegisterInstance<IImageCache, ImageCache>();
-            Container.RegisterInstance<TombstoneManager>();
-        }
+		private void InitContainer()
+		{
+			Container.RegisterInstance<PhoneApplicationService>();
+			Container.RegisterInstance<ILogger, NullLogger>();
+			Container.RegisterInstance<IMessagePublisher, MessagePublisher>();
+			Container.RegisterInstance<INavigationManager, NavigationManager>();
+			Container.RegisterInstance<ISettingsManager, SettingsManager>();
+			Container.RegisterInstance<IStateManager, StateManager>();
+			Container.RegisterInstance<IImageCache, ImageCache>();
+			Container.RegisterInstance<TombstoneManager>();
+			Container.RegisterInstance<IProgressIndicatorService, ProgressIndicatorService>();
+		}
 
-        private void InitPhoneServices()
-        {
-            var phoneApplicationService = Container.Resolve<PhoneApplicationService>();
-            phoneApplicationService.Activated += PhoneApplicationServiceActivated;
-            phoneApplicationService.Deactivated += PhoneApplicationServiceDeactivated;
-            Application.Current.ApplicationLifetimeObjects.Add(phoneApplicationService);
-            Application.Current.UnhandledException += (s, e) =>
-                {
-                    var logger = Container.TryResolve<ILogger>();
-                    if (logger != null)
-                    {
-                        logger.Fatal("Application Unhandled Exception", e.ExceptionObject);
-                    }
-                    OnApplicationUnhandledException(e);
-                };
-        }
+		private void InitPhoneServices()
+		{
+			var phoneApplicationService = Container.Resolve<PhoneApplicationService>();
+			phoneApplicationService.Activated += PhoneApplicationServiceActivated;
+			phoneApplicationService.Deactivated += PhoneApplicationServiceDeactivated;
+			Application.Current.ApplicationLifetimeObjects.Add(phoneApplicationService);
+			Application.Current.UnhandledException += (s, e) =>
+				{
+					var logger = Container.TryResolve<ILogger>();
+					if (logger != null)
+					{
+						logger.Fatal("Application Unhandled Exception", e.ExceptionObject);
+					}
+					OnApplicationUnhandledException(e);
+				};
+		}
 
-        private void InitMvvm()
-        {
-            var frame = Container.Resolve<PhoneApplicationFrame>();
-            frame.OrientationChanged += OnOrientationChanged;
-        }
+		private void InitMvvm()
+		{
+			var frame = Container.Resolve<PhoneApplicationFrame>();
+			frame.OrientationChanged += OnOrientationChanged;
+		}
 
-        #endregion
+		#endregion
 
-        #region IApplicationService Implementation
+		#region IApplicationService Implementation
 
-        public void StartService(ApplicationServiceContext context)
-        {
-            var frame = Container.Resolve<PhoneApplicationFrame>();
-            Application.Current.RootVisual = frame;
+		public void StartService(ApplicationServiceContext context)
+		{
+			var frame = Container.Resolve<PhoneApplicationFrame>();
+			Application.Current.RootVisual = frame;
 
-            frame.Navigating += FrameNavigating;
-            frame.Navigated += FrameNavigated;
+			frame.Navigating += FrameNavigating;
+			frame.Navigated += FrameNavigated;
 
-            Init();
-        }
+			Init();
+		}
 
-        public void StopService()
-        {
-        }
+		public void StopService()
+		{
+		}
 
-        #endregion
+		#endregion
 
-        #region Phone events
+		#region Phone events
 
-        private void PhoneApplicationServiceActivated(object sender, ActivatedEventArgs e)
-        {
-            OnApplicationActivated();
-        }
+		private void PhoneApplicationServiceActivated(object sender, ActivatedEventArgs e)
+		{
+			OnApplicationActivated();
+		}
 
-        private void PhoneApplicationServiceDeactivated(object sender, DeactivatedEventArgs e)
-        {
-            OnApplicationDeactivated();
-        }
+		private void PhoneApplicationServiceDeactivated(object sender, DeactivatedEventArgs e)
+		{
+			OnApplicationDeactivated();
+		}
 
-        private void FrameNavigating(object sender, NavigatingCancelEventArgs e)
-        {
-            if (_isFastResume)
-            {
-                _isFastResume = false;
-                var args = new FastResumeArgs(e.Uri);
-                OnFastResume(args);
+		private void FrameNavigating(object sender, NavigatingCancelEventArgs e)
+		{
+			if (_isFastResume)
+			{
+				_isFastResume = false;
+				var args = new FastResumeArgs(e.Uri);
+				OnFastResume(args);
 
-                if (args.ClearHistory)
-                {
-                    _clearHistory = true;
-                }
-                else if (args.PreserveLastOpenedPage)
-                {
-                    e.Cancel = true;
-                }
-                return;
-            }
-            if (DesignerProperties.IsInDesignTool || e.NavigationMode == NavigationMode.Back)
-            {
-                return;
-            }
+				if (args.ClearHistory)
+				{
+					_clearHistory = true;
+				}
+				else if (args.PreserveLastOpenedPage)
+				{
+					e.Cancel = true;
+				}
+				return;
+			}
+			if (DesignerProperties.IsInDesignTool || e.NavigationMode == NavigationMode.Back)
+			{
+				return;
+			}
 
-            var model = GetCurrentViewModel();
-            if (model == null)
-            {
-                return;
-            }
-            var tombstoneManager = Container.Resolve<TombstoneManager>();
-            tombstoneManager.SaveState(model);
-        }
+			var model = GetCurrentViewModel();
+			if (model == null)
+			{
+				return;
+			}
+			var tombstoneManager = Container.Resolve<TombstoneManager>();
+			tombstoneManager.SaveState(model);
+		}
 
-        private void FrameNavigated(object sender, NavigationEventArgs e)
-        {
-            if (e.NavigationMode == NavigationMode.Reset)
-            {
-                _isFastResume = true;
-                return;
-            }
-            if (DesignerProperties.IsInDesignTool || (e.NavigationMode == NavigationMode.Back && !e.IsNavigationInitiator))
-            {
-                return;
-            }
-            if (_clearHistory)
-            {
-                _clearHistory = false;
-                var frame = Container.Resolve<PhoneApplicationFrame>();
-                while (frame.RemoveBackEntry() != null)
-                {
-                }
-            }
-            var page = e.Content as PhoneApplicationPage;
-            if (page == null)
-            {
-                return;
-            }
-            page.Loaded -= PageLoaded;
-            page.Unloaded -= PageUnloaded;
-            var currentContext = page.DataContext as ViewModel;
-            if (currentContext != null)
-            {
-                var tombstoneManager = Container.Resolve<TombstoneManager>();
-                tombstoneManager.Clear();
-            }
-            else
-            {
-                var viewModelType = ViewModelMap.Resolve(page.GetType());
-                var viewModel = Container.TryResolve(viewModelType) as ViewModel;
-                if (viewModel == null)
-                {
-                    return;
-                }
-                viewModel.RootElement = page;
-                page.DataContext = viewModel;
-            }
-            page.Loaded += PageLoaded;
-            page.Unloaded += PageUnloaded;
-        }
+		private void FrameNavigated(object sender, NavigationEventArgs e)
+		{
+			if (e.NavigationMode == NavigationMode.Reset)
+			{
+				_isFastResume = true;
+				return;
+			}
+			if (DesignerProperties.IsInDesignTool || (e.NavigationMode == NavigationMode.Back && !e.IsNavigationInitiator))
+			{
+				return;
+			}
+			if (_clearHistory)
+			{
+				_clearHistory = false;
+				var frame = Container.Resolve<PhoneApplicationFrame>();
+				while (frame.RemoveBackEntry() != null)
+				{
+				}
+			}
+			var page = e.Content as PhoneApplicationPage;
+			if (page == null)
+			{
+				return;
+			}
+			page.Loaded -= PageLoaded;
+			page.Unloaded -= PageUnloaded;
+			var currentContext = page.DataContext as ViewModel;
+			if (currentContext != null)
+			{
+				var tombstoneManager = Container.Resolve<TombstoneManager>();
+				tombstoneManager.Clear();
+			}
+			else
+			{
+				var viewModelType = ViewModelMap.Resolve(page.GetType());
+				var viewModel = Container.TryResolve(viewModelType) as ViewModel;
+				if (viewModel == null)
+				{
+					return;
+				}
+				viewModel.RootElement = page;
+				page.DataContext = viewModel;
+			}
+			page.Loaded += PageLoaded;
+			page.Unloaded += PageUnloaded;
+		}
 
-        #endregion
+		#endregion
 
-        #region MVVM
+		#region MVVM
 
-        private ViewModel GetCurrentViewModel()
-        {
-            var frame = Container.Resolve<PhoneApplicationFrame>();
+		private ViewModel GetCurrentViewModel()
+		{
+			return Container.Resolve<PhoneApplicationFrame>().
+			                 With(x => x.Content as PhoneApplicationPage).
+			                 With(x => x.DataContext as ViewModel);
+		}
 
-            var page = frame.Content as PhoneApplicationPage;
-            if (page != null)
-            {
-                return page.DataContext as ViewModel;
-            }
-            return null;
-        }
+		private void PageLoaded(object sender, RoutedEventArgs routedEventArgs)
+		{
+			var page = sender as PhoneApplicationPage;
+			if (page == null)
+			{
+				return;
+			}
+			Container.Resolve<IProgressIndicatorService>().With(x => x as ProgressIndicatorService).Do(x => x.Update());
+			var model = page.DataContext as ViewModel;
+			if (model == null)
+			{
+				return;
+			}
 
-        private void PageLoaded(object sender, RoutedEventArgs routedEventArgs)
-        {
-            var page = sender as PhoneApplicationPage;
-            if (page == null)
-            {
-                return;
-            }
+			model.Orientation = Container.Resolve<PhoneApplicationFrame>().Orientation;
+			BindNavigationParameters(model);
 
-            var model = page.DataContext as ViewModel;
-            if (model == null)
-            {
-                return;
-            }
+			if (!model.IsCreated)
+			{
+				model.IsCreated = true;
+				model.FireOnCreate();
+			}
 
-            model.Orientation = Container.Resolve<PhoneApplicationFrame>().Orientation;
-            BindNavigationParameters(model);
+			model.FireOnLoad();
 
-            if (!model.IsCreated)
-            {
-                model.IsCreated = true;
-                model.FireOnCreate();
-            }
+			var tombstoneManager = Container.Resolve<TombstoneManager>();
+			tombstoneManager.LoadState(model);
+		}
 
-            model.FireOnLoad();
+		private void PageUnloaded(object sender, RoutedEventArgs routedEventArgs)
+		{
+			var page = sender as PhoneApplicationPage;
+			if (page == null)
+			{
+				return;
+			}
 
-            var tombstoneManager = Container.Resolve<TombstoneManager>();
-            tombstoneManager.LoadState(model);
-        }
+			var model = page.DataContext as ViewModel;
+			model.Do(x => x.FireOnUnload());
+			page.Loaded -= PageLoaded;
+			page.Unloaded -= PageUnloaded;
+		}
 
-        private void PageUnloaded(object sender, RoutedEventArgs routedEventArgs)
-        {
-            var page = sender as PhoneApplicationPage;
-            if (page == null)
-            {
-                return;
-            }
+		private void OnOrientationChanged(object sender, OrientationChangedEventArgs e)
+		{
+			var model = GetCurrentViewModel();
+			if (model != null)
+			{
+				model.Orientation = e.Orientation;
+			}
+		}
 
-            var model = page.DataContext as ViewModel;
-            if (model != null)
-            {
-                model.FireOnUnload();
-            }
+		private void BindNavigationParameters(ViewModel model)
+		{
+			var injectors = model.GetType().
+			                      GetProperties().
+			                      Select(x => new {Property = x, Attribute = (NavigationParamAttribute) x.GetCustomAttributes(typeof (NavigationParamAttribute), false).FirstOrDefault()}).
+			                      Where(x => x.Attribute != null);
+			foreach (var injector in injectors)
+			{
+				var propertyValue = GetParameter(injector.Property.PropertyType, injector.Attribute);
+				injector.Property.SetValue(model, propertyValue, null);
+			}
+		}
 
-            page.Loaded -= PageLoaded;
-            page.Unloaded -= PageUnloaded;
-        }
+		private object GetParameter(Type parameterType, NavigationParamAttribute attribute)
+		{
+			var navigationManager = Container.Resolve<INavigationManager>();
+			var parameter = navigationManager.GetQueryParameter(attribute.Name);
+			if (parameterType == typeof (int))
+			{
+				int number;
+				if (!int.TryParse(parameter, out number) && attribute.IsMandatory)
+				{
+					throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
+				}
+				return number;
+			}
+			if (parameterType == typeof (Guid))
+			{
+				Guid guid;
+				if (!Guid.TryParse(parameter, out guid) && attribute.IsMandatory)
+				{
+					throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
+				}
+				return guid;
+			}
+			if (parameterType == typeof (bool))
+			{
+				bool result;
+				if (!bool.TryParse(parameter, out result) && attribute.IsMandatory)
+				{
+					throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
+				}
+				return result;
+			}
+			return parameter;
+		}
 
-        private void OnOrientationChanged(object sender, OrientationChangedEventArgs e)
-        {
-            var model = GetCurrentViewModel();
-            if (model != null)
-            {
-                model.Orientation = e.Orientation;
-            }
-        }
+		#endregion
 
-        private void BindNavigationParameters(ViewModel model)
-        {
-            var injectors = model.GetType().
-                                  GetProperties().
-                                  Select(x => new {Property = x, Attribute = (NavigationParamAttribute) x.GetCustomAttributes(typeof (NavigationParamAttribute), false).FirstOrDefault()}).
-                                  Where(x => x.Attribute != null);
-            foreach (var injector in injectors)
-            {
-                var propertyValue = GetParameter(injector.Property.PropertyType, injector.Attribute);
-                injector.Property.SetValue(model, propertyValue, null);
-            }
-        }
+		#region Properties
 
-        private object GetParameter(Type parameterType, NavigationParamAttribute attribute)
-        {
-            var navigationManager = Container.Resolve<INavigationManager>();
-            var parameter = navigationManager.GetQueryParameter(attribute.Name);
-            if (parameterType == typeof (int))
-            {
-                int number;
-                if (!int.TryParse(parameter, out number) && attribute.IsMandatory)
-                {
-                    throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
-                }
-                return number;
-            }
-            if (parameterType == typeof (Guid))
-            {
-                Guid guid;
-                if (!Guid.TryParse(parameter, out guid) && attribute.IsMandatory)
-                {
-                    throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
-                }
-                return guid;
-            }
-            if (parameterType == typeof (bool))
-            {
-                bool result;
-                if (!bool.TryParse(parameter, out result) && attribute.IsMandatory)
-                {
-                    throw new Exception(string.Format("Navigation parameter '{0}' is empty", attribute.Name));
-                }
-                return result;
-            }
-            return parameter;
-        }
+		public static Bootstrapper Current { get; private set; }
 
-        #endregion
+		public IocContainer Container { get; private set; }
 
-        #region Properties
+		public ViewModelMap ViewModelMap { get; private set; }
 
-        public static Bootstrapper Current { get; private set; }
+		#endregion
 
-        public IocContainer Container { get; private set; }
+		#region Virtual members
 
-        public ViewModelMap ViewModelMap { get; private set; }
+		protected virtual void Init()
+		{
+		}
 
-        #endregion
+		protected virtual void OnFastResume(FastResumeArgs args)
+		{
+		}
 
-        #region Virtual members
+		protected virtual PhoneApplicationFrame CreateRootFrame()
+		{
+			return new PhoneApplicationFrame();
+		}
 
-        protected virtual void Init()
-        {
-        }
+		protected virtual void OnApplicationActivated()
+		{
+		}
 
-        protected virtual void OnFastResume(FastResumeArgs args)
-        {
-        }
+		protected virtual void OnApplicationDeactivated()
+		{
+		}
 
-        protected virtual PhoneApplicationFrame CreateRootFrame()
-        {
-            return new PhoneApplicationFrame();
-        }
+		protected virtual void OnApplicationUnhandledException(ApplicationUnhandledExceptionEventArgs applicationUnhandledExceptionEventArgs)
+		{
+		}
 
-        protected virtual void OnApplicationActivated()
-        {
-        }
-
-        protected virtual void OnApplicationDeactivated()
-        {
-        }
-
-        protected virtual void OnApplicationUnhandledException(ApplicationUnhandledExceptionEventArgs applicationUnhandledExceptionEventArgs)
-        {
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }
