@@ -14,8 +14,8 @@ namespace Vermeil.Notify
 {
 	internal class ProgressIndicatorService : IProgressIndicatorService
 	{
+		private readonly List<TaskHolder> _holders = new List<TaskHolder>();
 		private readonly object _syncRoot = new object();
-		private readonly List<TaskHolder> _tokens = new List<TaskHolder>();
 
 		#region Public members
 
@@ -23,11 +23,11 @@ namespace Vermeil.Notify
 		{
 			if (Deployment.Current.Dispatcher.CheckAccess())
 			{
-				ShowIndeterminateInternal(message, token);
+				UpdateHolder(-1, message, token);
 			}
 			else
 			{
-				Deployment.Current.Dispatcher.BeginInvoke(() => ShowIndeterminateInternal(message, token));
+				Deployment.Current.Dispatcher.BeginInvoke(() => UpdateHolder(-1, message, token));
 			}
 		}
 
@@ -35,11 +35,11 @@ namespace Vermeil.Notify
 		{
 			if (Deployment.Current.Dispatcher.CheckAccess())
 			{
-				ShowProgressInternal(progress, message, token);
+				UpdateHolder(progress, message, token);
 			}
 			else
 			{
-				Deployment.Current.Dispatcher.BeginInvoke(() => ShowProgressInternal(progress, message, token));
+				Deployment.Current.Dispatcher.BeginInvoke(() => UpdateHolder(progress, message, token));
 			}
 		}
 
@@ -57,62 +57,29 @@ namespace Vermeil.Notify
 
 		#endregion
 
-		#region Properties
-
-		private bool IsBusy { get; set; }
-
-		private string Text { get; set; }
-
-		private double Progress { get; set; }
-
-		#endregion
-
 		#region Private members
 
-		private void ShowIndeterminateInternal(string message, string token)
+		private void UpdateHolder(double progress, string message, string token)
 		{
-			if (token == null)
-			{
-				throw new ArgumentException("Token is null");
-			}
 			lock (_syncRoot)
 			{
-				if (_tokens.All(x => x.Token != token))
-				{
-					_tokens.Add(new TaskHolder
-					{
-						Token = token,
-						Message = message,
-						Progress = -1
-					});
-				}
-				Update();
-			}
-		}
-
-		private void ShowProgressInternal(double progress, string message, string token)
-		{
-			if (token == null)
-			{
-				throw new ArgumentException("Token is null");
-			}
-			lock (_syncRoot)
-			{
-				var existing = _tokens.FirstOrDefault(x => x.Token == token);
+				var existing = _holders.FirstOrDefault(x => x.Token == token);
 				if (existing == null)
 				{
-					_tokens.Add(new TaskHolder
+					existing = new TaskHolder
 					{
 						Token = token,
 						Message = message,
 						Progress = progress
-					});
+					};
 				}
 				else
 				{
 					existing.Message = message;
 					existing.Progress = progress;
+					_holders.Remove(existing);
 				}
+				_holders.Add(existing);
 				Update();
 			}
 		}
@@ -125,10 +92,10 @@ namespace Vermeil.Notify
 			}
 			lock (_syncRoot)
 			{
-				var existing = _tokens.FirstOrDefault(x => x.Token == token);
+				var existing = _holders.FirstOrDefault(x => x.Token == token);
 				if (existing != null)
 				{
-					_tokens.Remove(existing);
+					_holders.Remove(existing);
 				}
 				Update();
 			}
@@ -136,18 +103,15 @@ namespace Vermeil.Notify
 
 		internal void Update()
 		{
-			var last = _tokens.LastOrDefault();
+			var text = "";
+			var isBusy = false;
+			var progress = -1d;
+			var last = _holders.LastOrDefault();
 			if (last != null)
 			{
-				Text = last.Message;
-				Progress = last.Progress;
-				IsBusy = true;
-			}
-			else
-			{
-				Text = null;
-				IsBusy = false;
-				Progress = 0;
+				text = last.Message;
+				progress = last.Progress;
+				isBusy = true;
 			}
 
 			Application.Current.RootVisual.
@@ -161,10 +125,10 @@ namespace Vermeil.Notify
 					            }
 					            return SystemTray.GetProgressIndicator(x);
 				            }).
-			            Do(x => x.IsVisible = IsBusy).
-			            Do(x => x.Text = Text).
-			            Do(x => x.IsIndeterminate = Progress < 0).
-			            Do(x => x.Value = Progress);
+			            Do(x => x.IsVisible = isBusy).
+			            Do(x => x.Text = text).
+			            Do(x => x.IsIndeterminate = progress < 0).
+			            Do(x => x.Value = progress);
 		}
 
 		#endregion
