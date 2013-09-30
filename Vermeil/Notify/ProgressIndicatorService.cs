@@ -28,7 +28,7 @@ namespace Vermeil.Notify
             private set { SetValue(IsBusyProperty, value); }
         }
 
-        public void ShowIndeterminate(string message, string token)
+        public void ShowIndeterminate(string message, object token)
         {
             if (Deployment.Current.Dispatcher.CheckAccess())
             {
@@ -40,7 +40,7 @@ namespace Vermeil.Notify
             }
         }
 
-        public void ShowProgress(double progress, string message, string token)
+        public void ShowProgress(double progress, string message, object token)
         {
             if (Deployment.Current.Dispatcher.CheckAccess())
             {
@@ -52,7 +52,7 @@ namespace Vermeil.Notify
             }
         }
 
-        public void Hide(string token)
+        public void Hide(object token)
         {
             if (Deployment.Current.Dispatcher.CheckAccess())
             {
