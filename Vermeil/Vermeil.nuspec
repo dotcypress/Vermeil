@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Vermeil</id>
-    <version>3.4.2</version>
+    <version>3.4.3</version>
     <authors>Vitaly Domnikov</authors>
     <owners>Vitaly Domnikov</owners>
     <licenseUrl>https://github.com/dotCypress/Vermeil</licenseUrl>
@@ -14,6 +14,7 @@
     <dependencies>
       <dependency id="Vermeil.Core" version="3.2.0" />
       <dependency id="WPtoolkit" version="4.2013.08.16" />
+      <dependency id="PhoneThemeManager" version="1.5" />
     </dependencies>
   </metadata>
   <files>

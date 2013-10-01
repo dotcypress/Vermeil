@@ -33,7 +33,7 @@ namespace Vermeil.Controls
 
         public BindableApplicationBar()
         {
-            _applicationBar = new ApplicationBar();
+            _applicationBar = ThemeManager.CreateApplicationBar();
             Loaded += ApplicationBarLoaded;
         }
 
