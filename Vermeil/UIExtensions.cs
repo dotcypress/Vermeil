@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -26,9 +25,10 @@ namespace Vermeil
 
         public static T FindAncestorWithType<T>(this DependencyObject target) where T : class
         {
-            return GetAncestors(target).FirstOrDefault(typeof(T).IsInstanceOfType) as T;
+            return GetAncestors(target).FirstOrDefault(typeof (T).IsInstanceOfType) as T;
         }
 
         #endregion
+
     }
 }

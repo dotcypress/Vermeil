@@ -17,12 +17,12 @@ namespace Vermeil.Commands
             _uri = uri;
         }
 
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
             return true;
         }
 
-        public void Execute(object parameter)
+        public virtual void Execute(object parameter)
         {
             var bootstrapper = Bootstrapper.Current;
             if (bootstrapper != null)

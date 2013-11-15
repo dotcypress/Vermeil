@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows;
 
 #endregion
 
 namespace Vermeil.Core
 {
+    public delegate void PropertyChangedCallback<T>(T sender, DependencyPropertyChangedEventArgs e) where T : DependencyObject;
     public static class Extensions
     {
         #region Expressions
@@ -166,5 +168,40 @@ namespace Vermeil.Core
         }
 
         #endregion
+
+        public static DependencyProperty Register<TProperty, TOwner>(string name,
+            TProperty defaultValue = default(TProperty),
+            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
+        {
+            return RegisterImpl(false, name, defaultValue, callback);
+        }
+
+        public static DependencyProperty RegisterAttached<TProperty, TOwner>(string name,
+            TProperty defaultValue = default(TProperty),
+            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
+        {
+            return RegisterImpl(true, name, defaultValue, callback);
+        }
+
+        private static DependencyProperty RegisterImpl<TProperty, TOwner>(bool isAttached,
+            string name,
+            TProperty defaultValue = default(TProperty),
+            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
+        {
+            var callbackWrapper = callback != null
+                ? (sender, e) => callback((TOwner)sender, e)
+                : (PropertyChangedCallback)null;
+
+            return isAttached
+                ? DependencyProperty.RegisterAttached(name,
+                    typeof(TProperty),
+                    typeof(TOwner),
+                    new PropertyMetadata(defaultValue, callbackWrapper))
+                : DependencyProperty.Register(name,
+                    typeof(TProperty),
+                    typeof(TOwner),
+                    new PropertyMetadata(defaultValue, callbackWrapper));
+        }
+    
     }
 }
