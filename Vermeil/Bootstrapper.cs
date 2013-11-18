@@ -210,7 +210,7 @@ namespace Vermeil
 			{
 				return;
 			}
-			Container.Resolve<IProgressIndicatorService>().With(x => x as ProgressIndicatorService).Do(x => x.Update());
+			Container.TryResolve<IProgressIndicatorService>().With(x => x as ProgressIndicatorService).Do(x => x.Update());
 			var model = page.DataContext as ViewModel;
 			if (model == null)
 			{
