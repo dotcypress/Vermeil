@@ -55,7 +55,16 @@ namespace Vermeil
 			Container.RegisterInstance<IStateManager, StateManager>();
 			Container.RegisterInstance<IImageCache, ImageCache>();
 			Container.RegisterInstance<TombstoneManager>();
-			Container.RegisterInstance<IProgressIndicatorService, ProgressIndicatorService>();
+		    var indicatorService = (ProgressIndicatorService)Application.Current.Resources.Select(x => x.Value).FirstOrDefault(x => x is ProgressIndicatorService);
+            if (indicatorService != null)
+            {
+                Container.RegisterInstance(indicatorService);
+            }
+            else
+            {
+                Container.RegisterInstance<ProgressIndicatorService>();
+            }
+            
 		}
 
 		private void InitPhoneServices()
@@ -211,7 +220,7 @@ namespace Vermeil
 			{
 				return;
 			}
-			Container.Resolve<IProgressIndicatorService>().With(x => x as ProgressIndicatorService).Do(x => x.Update());
+			Container.Resolve<ProgressIndicatorService>().Do(x => x.Update());
 			var model = page.DataContext as ViewModel;
 			if (model == null)
 			{

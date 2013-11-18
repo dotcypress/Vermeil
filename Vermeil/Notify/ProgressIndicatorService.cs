@@ -12,7 +12,7 @@ using Vermeil.Core;
 
 namespace Vermeil.Notify
 {
-    internal class ProgressIndicatorService : DependencyObject, IProgressIndicatorService
+    public class ProgressIndicatorService : DependencyObject
     {
         private readonly List<TaskHolder> _holders = new List<TaskHolder>();
         private readonly object _syncRoot = new object();
