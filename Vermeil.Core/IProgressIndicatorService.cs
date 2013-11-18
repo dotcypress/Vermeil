@@ -1,4 +1,4 @@
-﻿namespace Vermeil.Notify
+﻿namespace Vermeil.Core
 {
     public interface IProgressIndicatorService
     {

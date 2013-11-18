@@ -3,6 +3,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Vermeil.Commands;
+using Vermeil.Core;
 using Vermeil.Core.IoC;
 using Vermeil.Core.Logging;
 using Vermeil.MVVM;
