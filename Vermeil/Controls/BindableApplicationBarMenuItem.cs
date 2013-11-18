@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Phone.Shell;
+using Vermeil.Core;
 
 #endregion
 
@@ -11,35 +12,16 @@ namespace Vermeil.Controls
 {
     public class BindableApplicationBarMenuItem : FrameworkElement, IApplicationBarMenuItem
     {
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command",
-            typeof (ICommand),
-            typeof (BindableApplicationBarMenuItem),
-            new PropertyMetadata(CommandChanged));
-
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter",
-            typeof (object),
-            typeof (BindableApplicationBarMenuItem),
-            new PropertyMetadata(CommandParameterChanged));
-
-
-        public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
-            typeof (string),
-            typeof (BindableApplicationBarMenuItem),
-            new PropertyMetadata(OnTextChanged));
-
-
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached("IsEnabled",
-            typeof (bool),
-            typeof (BindableApplicationBarMenuItem),
-            new PropertyMetadata(true, OnEnabledChanged));
+        public static readonly DependencyProperty CommandProperty = VermeilExtensions.RegisterAttached<ICommand, BindableApplicationBarMenuItem>("Command", null, CommandChanged);
+        public static readonly DependencyProperty CommandParameterProperty = VermeilExtensions.RegisterAttached<object, BindableApplicationBarMenuItem>("CommandParameter", null, CommandParameterChanged);
+        public static readonly DependencyProperty TextProperty = VermeilExtensions.RegisterAttached<string, BindableApplicationBarMenuItem>("Text", null, OnTextChanged);
+        public static readonly DependencyProperty IsEnabledProperty = VermeilExtensions.RegisterAttached<bool, BindableApplicationBarMenuItem>("IsEnabled", true, OnEnabledChanged);
 
         public BindableApplicationBarMenuItem()
         {
             MenuItem = new ApplicationBarMenuItem {Text = "-"};
             MenuItem.Click += ApplicationBarMenuItemClick;
         }
-
 
         public ICommand Command
         {

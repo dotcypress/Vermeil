@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Vermeil.Core;
 
 #endregion
 
@@ -18,16 +19,8 @@ namespace Vermeil.Controls
     [ContentProperty("Buttons")]
     public class BindableApplicationBar : ItemsControl, IApplicationBar
     {
-        public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.RegisterAttached("IsVisible",
-            typeof (bool),
-            typeof (BindableApplicationBar),
-            new PropertyMetadata(true, OnVisibleChanged));
-
-
-        public static readonly DependencyProperty IsMenuEnabledProperty = DependencyProperty.RegisterAttached("IsMenuEnabled",
-            typeof (bool),
-            typeof (BindableApplicationBar),
-            new PropertyMetadata(true, OnEnabledChanged));
+        public static readonly DependencyProperty IsVisibleProperty = VermeilExtensions.RegisterAttached<bool,BindableApplicationBar>("IsVisible",true, OnVisibleChanged);
+        public static readonly DependencyProperty IsMenuEnabledProperty = VermeilExtensions.RegisterAttached<bool,BindableApplicationBar>("IsMenuEnabled",true, OnEnabledChanged);
 
         private readonly ApplicationBar _applicationBar;
 

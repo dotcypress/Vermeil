@@ -91,6 +91,7 @@
     <Compile Include="Cache\IImageCache.cs" />
     <Compile Include="Cache\ImageCache.cs" />
     <Compile Include="Cache\ImageRequest.cs" />
+    <Compile Include="Commands\LazyCommand.cs" />
     <Compile Include="Commands\NavigationCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\OneShotDispatcherTimer.cs" />

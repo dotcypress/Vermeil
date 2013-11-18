@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Phone.Shell;
+using Vermeil.Core;
 
 #endregion
 
@@ -11,38 +12,12 @@ namespace Vermeil.Controls
 {
     public class BindableApplicationBarIconButton : FrameworkElement, IApplicationBarIconButton
     {
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command",
-            typeof (ICommand),
-            typeof (BindableApplicationBarIconButton),
-            new PropertyMetadata(CommandChanged));
-
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter",
-            typeof (object),
-            typeof (BindableApplicationBarIconButton),
-            new PropertyMetadata(CommandParameterChanged));
-
-
-        public static readonly DependencyProperty CommandParameterValueProperty = DependencyProperty.RegisterAttached("CommandParameterValue",
-            typeof (object),
-            typeof (BindableApplicationBarMenuItem),
-            null);
-
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached("IsEnabled",
-            typeof (bool),
-            typeof (BindableApplicationBarIconButton),
-            new PropertyMetadata(true, OnEnabledChanged));
-
-
-        public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached("Text",
-            typeof (string),
-            typeof (BindableApplicationBarIconButton),
-            new PropertyMetadata(OnTextChanged));
-
-        public static readonly DependencyProperty IconUriProperty = DependencyProperty.RegisterAttached("IconUri",
-            typeof (Uri),
-            typeof (BindableApplicationBarIconButton),
-            new PropertyMetadata(OnIconUriChanged));
+        public static readonly DependencyProperty CommandProperty = VermeilExtensions.RegisterAttached<ICommand, BindableApplicationBarIconButton>("Command", null, CommandChanged);
+        public static readonly DependencyProperty CommandParameterProperty = VermeilExtensions.RegisterAttached<object, BindableApplicationBarIconButton>("CommandParameter", null, CommandParameterChanged);
+        public static readonly DependencyProperty CommandParameterValueProperty = VermeilExtensions.RegisterAttached<object, BindableApplicationBarIconButton>("CommandParameterValue");
+        public static readonly DependencyProperty IsEnabledProperty = VermeilExtensions.RegisterAttached<bool, BindableApplicationBarIconButton>("IsEnabled", true, OnEnabledChanged);
+        public static readonly DependencyProperty TextProperty = VermeilExtensions.RegisterAttached<string, BindableApplicationBarIconButton>("Text", null, OnTextChanged);
+        public static readonly DependencyProperty IconUriProperty = VermeilExtensions.RegisterAttached<Uri, BindableApplicationBarIconButton>("IconUri", null, OnIconUriChanged);
 
         public BindableApplicationBarIconButton()
         {

@@ -19,8 +19,7 @@ namespace Vermeil.Notify
 
         #region Public members
 
-        public static readonly DependencyProperty IsBusyProperty =
-            DependencyProperty.Register("IsBusy", typeof (bool), typeof (ProgressIndicatorService), new PropertyMetadata(default(bool)));
+        public static readonly DependencyProperty IsBusyProperty = VermeilExtensions.Register<bool, ProgressIndicatorService>("IsBusy");
 
         public bool IsBusy
         {

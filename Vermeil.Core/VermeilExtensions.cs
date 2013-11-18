@@ -10,8 +10,9 @@ using System.Windows;
 
 namespace Vermeil.Core
 {
-    public delegate void PropertyChangedCallback<T>(T sender, DependencyPropertyChangedEventArgs e) where T : DependencyObject;
-    public static class Extensions
+    public delegate void PropertyChangedCallback<T>(T sender, DependencyPropertyChangedEventArgs e);
+
+    public static class VermeilExtensions
     {
         #region Expressions
 
@@ -169,39 +170,31 @@ namespace Vermeil.Core
 
         #endregion
 
+        #region DependencyProperty
+
         public static DependencyProperty Register<TProperty, TOwner>(string name,
             TProperty defaultValue = default(TProperty),
             PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
         {
-            return RegisterImpl(false, name, defaultValue, callback);
+            var callbackWrapper = callback != null
+                ? (sender, e) => callback(sender as TOwner, e)
+                : (PropertyChangedCallback) null;
+            return DependencyProperty.Register(name,
+                typeof (TProperty),
+                typeof (TOwner),
+                new PropertyMetadata(defaultValue, callbackWrapper));
         }
 
         public static DependencyProperty RegisterAttached<TProperty, TOwner>(string name,
             TProperty defaultValue = default(TProperty),
-            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
+            PropertyChangedCallback callback = null)
         {
-            return RegisterImpl(true, name, defaultValue, callback);
+            return DependencyProperty.RegisterAttached(name,
+                typeof (TProperty),
+                typeof (TOwner),
+                new PropertyMetadata(defaultValue, callback));
         }
 
-        private static DependencyProperty RegisterImpl<TProperty, TOwner>(bool isAttached,
-            string name,
-            TProperty defaultValue = default(TProperty),
-            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
-        {
-            var callbackWrapper = callback != null
-                ? (sender, e) => callback((TOwner)sender, e)
-                : (PropertyChangedCallback)null;
-
-            return isAttached
-                ? DependencyProperty.RegisterAttached(name,
-                    typeof(TProperty),
-                    typeof(TOwner),
-                    new PropertyMetadata(defaultValue, callbackWrapper))
-                : DependencyProperty.Register(name,
-                    typeof(TProperty),
-                    typeof(TOwner),
-                    new PropertyMetadata(defaultValue, callbackWrapper));
-        }
-    
+        #endregion
     }
 }

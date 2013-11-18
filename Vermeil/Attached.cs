@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Phone.Tasks;
 using Vermeil.Cache;
+using Vermeil.Core;
 
 #endregion
 
@@ -19,11 +20,7 @@ namespace Vermeil
     {
         #region Autoupdate Binding
 
-        public static readonly DependencyProperty AutoUpdateBindingProperty =
-            DependencyProperty.RegisterAttached("AutoUpdateBinding",
-                typeof (bool),
-                typeof (Attached),
-                new PropertyMetadata(OnUpdateSourceTriggerChanged));
+        public static readonly DependencyProperty AutoUpdateBindingProperty = VermeilExtensions.RegisterAttached<bool, Attached>("AutoUpdateBinding", false, OnUpdateSourceTriggerChanged);
 
         public static bool GetAutoUpdateBinding(DependencyObject target)
         {
@@ -86,11 +83,7 @@ namespace Vermeil
 
         #region Command
 
-        public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.RegisterAttached("Command",
-                typeof (ICommand),
-                typeof (Attached),
-                new PropertyMetadata(OnCommandChanged));
+        public static readonly DependencyProperty CommandProperty = VermeilExtensions.RegisterAttached<ICommand, Attached>("Command", null, OnCommandChanged);
 
         public static ICommand GetCommand(DependencyObject dependencyObject)
         {
@@ -138,11 +131,7 @@ namespace Vermeil
 
         #region TextBoxReturn command
 
-        public static readonly DependencyProperty ReturnCommandProperty =
-            DependencyProperty.RegisterAttached("ReturnCommand",
-                typeof (ICommand),
-                typeof (Attached),
-                new PropertyMetadata(OnReturnCommandChanged));
+        public static readonly DependencyProperty ReturnCommandProperty = VermeilExtensions.RegisterAttached<ICommand, Attached>("ReturnCommand", null, OnReturnCommandChanged);
 
         public static ICommand GetReturnCommand(DependencyObject dependencyObject)
         {
@@ -179,11 +168,7 @@ namespace Vermeil
 
         #region Image UriSource
 
-        public static readonly DependencyProperty UriSourceProperty =
-            DependencyProperty.RegisterAttached("UriSource",
-                typeof (Uri),
-                typeof (Attached),
-                new PropertyMetadata(OnUriSourceChanged));
+        public static readonly DependencyProperty UriSourceProperty = VermeilExtensions.RegisterAttached<Uri, Attached>("UriSource", null, OnUriSourceChanged);
 
 
         public static Uri GetUriSource(Image obj)
@@ -215,11 +200,7 @@ namespace Vermeil
 
         #region AutoFocus
 
-        public static readonly DependencyProperty AutoFocusProperty =
-            DependencyProperty.RegisterAttached("AutoFocus",
-                typeof (bool),
-                typeof (Attached),
-                new PropertyMetadata(AutoFocusChanged));
+        public static readonly DependencyProperty AutoFocusProperty = VermeilExtensions.RegisterAttached<bool, Attached>("AutoFocus", false, AutoFocusChanged);
 
         public static bool GetAutoFocus(DependencyObject target)
         {
@@ -271,23 +252,11 @@ namespace Vermeil
 
         #region PasswordBox
 
-        public static readonly DependencyProperty BoundPasswordProperty =
-            DependencyProperty.RegisterAttached("BoundPassword",
-                typeof (string),
-                typeof (Attached),
-                new PropertyMetadata(string.Empty, OnBoundPasswordChanged));
+        public static readonly DependencyProperty BoundPasswordProperty = VermeilExtensions.RegisterAttached<string, Attached>("BoundPassword", string.Empty, OnBoundPasswordChanged);
 
-        public static readonly DependencyProperty BindPasswordProperty =
-            DependencyProperty.RegisterAttached("BindPassword",
-                typeof (bool),
-                typeof (Attached),
-                new PropertyMetadata(false, OnBindPasswordChanged));
+        public static readonly DependencyProperty BindPasswordProperty = VermeilExtensions.RegisterAttached<bool, Attached>("BindPassword", false, OnBindPasswordChanged);
 
-        private static readonly DependencyProperty UpdatingPasswordProperty =
-            DependencyProperty.RegisterAttached("UpdatingPassword",
-                typeof (bool),
-                typeof (Attached),
-                new PropertyMetadata(false));
+        private static readonly DependencyProperty UpdatingPasswordProperty = VermeilExtensions.RegisterAttached<bool, Attached>("UpdatingPassword");
 
         private static void OnBoundPasswordChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs changedEventArgs)
         {
@@ -370,11 +339,7 @@ namespace Vermeil
 
         #region HyperlinkButton
 
-        public static readonly DependencyProperty WebLinkProperty =
-            DependencyProperty.RegisterAttached("WebLink",
-                typeof (Uri),
-                typeof (Attached),
-                new PropertyMetadata(OnWebLinkChanged));
+        public static readonly DependencyProperty WebLinkProperty = VermeilExtensions.RegisterAttached<Uri, Attached>("WebLink", null, OnWebLinkChanged);
 
         public static Uri GetWebLink(DependencyObject dependencyObject)
         {
@@ -411,11 +376,11 @@ namespace Vermeil
         #region Animation Trigger
 
         public static readonly DependencyProperty AnimationTriggerProperty =
-            DependencyProperty.RegisterAttached("AnimationTrigger", typeof(object), typeof(Attached), new PropertyMetadata(AnimationTriggerChanged));
+            VermeilExtensions.RegisterAttached<object, Attached>("AnimationTrigger", null, AnimationTriggerChanged);
 
         public static bool GetAnimationTrigger(DependencyObject target)
         {
-            return (bool)target.GetValue(AnimationTriggerProperty);
+            return (bool) target.GetValue(AnimationTriggerProperty);
         }
 
         public static void SetAnimationTrigger(DependencyObject target, bool value)
@@ -438,11 +403,11 @@ namespace Vermeil
         #region Animation Conroller
 
         public static readonly DependencyProperty AnimationConrollerProperty =
-            DependencyProperty.RegisterAttached("AnimationConroller", typeof(bool), typeof(Attached), new PropertyMetadata(AnimationConrollerChanged));
+            VermeilExtensions.RegisterAttached<bool, Attached>("AnimationConroller", false, AnimationConrollerChanged);
 
         public static bool GetAnimationConroller(DependencyObject target)
         {
-            return (bool)target.GetValue(AnimationConrollerProperty);
+            return (bool) target.GetValue(AnimationConrollerProperty);
         }
 
         public static void SetAnimationConroller(DependencyObject target, bool value)
@@ -459,7 +424,7 @@ namespace Vermeil
                 return;
             }
 
-            if ((bool)e.NewValue)
+            if ((bool) e.NewValue)
             {
                 storyboard.Stop();
                 storyboard.AutoReverse = false;
@@ -476,8 +441,5 @@ namespace Vermeil
         }
 
         #endregion
-
-
-
     }
 }
