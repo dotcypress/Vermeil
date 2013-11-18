@@ -11,7 +11,11 @@ namespace Vermeil.Commands
     {
         private ICommand _command;
 
-        public LazyCommand(ICommand command = null)
+        public LazyCommand()
+        {
+        }
+
+        public LazyCommand(ICommand command)
         {
             _command = command;
         }
