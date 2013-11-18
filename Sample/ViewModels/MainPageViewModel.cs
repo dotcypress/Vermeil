@@ -29,7 +29,7 @@ namespace Sample.ViewModels
 		public ILogger Logger { get; set; }
 
 		[Inject]
-		public ProgressIndicatorService ProgressIndicatorService { get; set; }
+		public IProgressIndicatorService ProgressIndicatorService { get; set; }
 
 		[Inject("silent")]
 		public ILogger SilentLogger { get; set; }

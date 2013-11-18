@@ -120,6 +120,7 @@
     <Compile Include="Navigation\INavigationManager.cs" />
     <Compile Include="Navigation\NavigationManager.cs" />
     <Compile Include="Navigation\PageQuery.cs" />
+    <Compile Include="Notify\IProgressIndicatorService.cs" />
     <Compile Include="Notify\ProgressIndicatorService.cs" />
     <Compile Include="State\IStateManager.cs" />
     <Compile Include="State\StateManager.cs" />
