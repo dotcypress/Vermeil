@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Vermeil.Core</id>
-    <version>3.3.2</version>
+    <version>3.3.3</version>
     <authors>Vitaly Domnikov</authors>
     <owners>Vitaly Domnikov</owners>
     <licenseUrl>https://github.com/dotCypress/Vermeil</licenseUrl>

@@ -2,6 +2,7 @@
 
 using System.Windows;
 using System.Windows.Input;
+using Vermeil;
 using Vermeil.Commands;
 using Vermeil.Core;
 using Vermeil.Core.IoC;
@@ -68,6 +69,7 @@ namespace Sample.ViewModels
 
 		private void Increase()
 		{
+		    
 		}
 	}
 }

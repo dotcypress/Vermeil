@@ -1,9 +1,11 @@
 ﻿<Application x:Class="Sample.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:sample="clr-namespace:Sample">
+             xmlns:sample="clr-namespace:Sample" 
+             xmlns:notify="clr-namespace:Vermeil.Notify;assembly=Vermeil">
     <Application.Resources>
         <local:LocalizedStrings xmlns:local="clr-namespace:Sample" x:Key="LocalizedStrings" />
+        <notify:ProgressIndicatorService x:Key="IndicatorService" />
     </Application.Resources>
     <Application.ApplicationLifetimeObjects>
         <sample:SampleBootstrapper />
