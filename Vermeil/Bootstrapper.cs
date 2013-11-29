@@ -152,7 +152,6 @@ namespace Vermeil
 
         private void FrameNavigated(object sender, NavigationEventArgs e)
         {
-            BuildAlignmentGrid();
             if (e.NavigationMode == NavigationMode.Reset)
             {
                 _isFastResume = true;
@@ -210,6 +209,10 @@ namespace Vermeil
             }
 
             var frame = Container.Resolve<PhoneApplicationFrame>();
+            if (VisualTreeHelper.GetChildrenCount(frame) == 0)
+            {
+                return;
+            }
             var child = VisualTreeHelper.GetChild(frame, 0);
             var childAsBorder = child as Border;
             var childAsGrid = child as Grid;
@@ -292,6 +295,7 @@ namespace Vermeil
 
         private void PageLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
+            BuildAlignmentGrid();
             var page = sender as PhoneApplicationPage;
             if (page == null)
             {

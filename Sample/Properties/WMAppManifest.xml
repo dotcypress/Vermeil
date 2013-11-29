@@ -2,7 +2,7 @@
 
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{d28ee25b-0a2d-4946-bb28-efa6509b307e}" Title="Sample" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Sample author" Description="Sample description"
+  <App xmlns=""  ProductID="{d28ee25b-0a2d-4946-bb28-efa6509b307e}" Title="Sample" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Sample author" Description="Sample description"
        Publisher="Sample" PublisherID="{c289c6a3-30c1-4ef6-9f8a-adeaa8f3acbc}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
@@ -13,7 +13,7 @@
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="/Views/MainPage.xaml" />
+      <DefaultTask Name="_default" NavigationPage="/Views/MainPage.xaml" ActivationPolicy="Resume"/>
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="SampleToken" TaskName="_default">
