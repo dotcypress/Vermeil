@@ -39,6 +39,7 @@ namespace Vermeil.Cache
                 _started = true;
 
                 _webRequest = (HttpWebRequest) WebRequest.Create(ImageUri);
+                _webRequest.Accept = "image/*";
                 _webRequest.BeginGetResponse(OnGotResponse, null);
             }
         }
