@@ -35,6 +35,9 @@
             <TextBlock Text="{Binding MyProperty, Mode=TwoWay}" VerticalAlignment="Top" />
         </StackPanel>
         <controls:BindableApplicationBar>
+            <controls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Check.png"
+                                                       Text="info"
+                                                       IsVisible="{Binding ShowButton}"/>
             <controls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Delete.png"
                                                        Text="info" />
 
@@ -43,13 +46,14 @@
                                                        IsVisible="{Binding ShowButton}"
                                                        Command="{Binding InfoCommand}"
                                                        CommandParameter="{Binding MyProperty}" />
-
             <controls:BindableApplicationBarIconButton IconUri="/Toolkit.Content/ApplicationBar.Cancel.png"
                                                        Text="info" />
             <controls:BindableApplicationBar.MenuItems>
-                <controls:BindableApplicationBarMenuItem Text="about"
+                <controls:BindableApplicationBarMenuItem Text="one"/>
+                <controls:BindableApplicationBarMenuItem Text="two"
                                                          IsVisible="{Binding ShowButton}"
                                                          Command="{Binding AboutCommand}" />
+                <controls:BindableApplicationBarMenuItem Text="three"/>
             </controls:BindableApplicationBar.MenuItems>
         </controls:BindableApplicationBar>
     </Grid>

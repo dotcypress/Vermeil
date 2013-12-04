@@ -23,13 +23,11 @@ namespace Vermeil.Controls
         public static readonly DependencyProperty IsMenuEnabledProperty = VermeilExtensions.RegisterAttached<bool, BindableApplicationBar>("IsMenuEnabled", true, OnEnabledChanged);
 
         private readonly ApplicationBar _applicationBar;
-        private readonly EventHandler _buttonOnIsVisibleChanged;
 
         public BindableApplicationBar()
         {
             _applicationBar = new ApplicationBar();
             Loaded += ApplicationBarLoaded;
-            _buttonOnIsVisibleChanged = (sender, args) => RebuildAppBar();
         }
 
         public double BarOpacity
@@ -109,19 +107,14 @@ namespace Vermeil.Controls
 
             foreach (BindableApplicationBarIconButton button in Items.Where(c => c is BindableApplicationBarIconButton))
             {
-                button.IsVisibleChanged -= _buttonOnIsVisibleChanged;
-                button.IsVisibleChanged += _buttonOnIsVisibleChanged;
+                button.IsVisibleChanged -= RebuildAppBar;
+                button.IsVisibleChanged += RebuildAppBar;
             }
             foreach (BindableApplicationBarMenuItem button in Items.Where(c => c is BindableApplicationBarMenuItem))
             {
-                button.IsVisibleChanged -= _buttonOnIsVisibleChanged;
-                button.IsVisibleChanged += _buttonOnIsVisibleChanged;
+                button.IsVisibleChanged -= RebuildAppBar;
+                button.IsVisibleChanged += RebuildAppBar;
             }
-            RebuildAppBar();
-        }
-
-        private void RebuildAppBar()
-        {
             _applicationBar.Buttons.Clear();
             _applicationBar.MenuItems.Clear();
             foreach (var button in Items.Where(c => c is BindableApplicationBarIconButton).Cast<BindableApplicationBarIconButton>().Where(button => button.IsVisible))
@@ -131,6 +124,38 @@ namespace Vermeil.Controls
             foreach (var button in Items.Where(c => c is BindableApplicationBarMenuItem).Cast<BindableApplicationBarMenuItem>().Where(button => button.IsVisible))
             {
                 _applicationBar.MenuItems.Add(button.MenuItem);
+            }
+        }
+
+        private void RebuildAppBar(object sender, EventArgs eventArgs)
+        {
+            var iconButton = sender as BindableApplicationBarIconButton;
+            if (iconButton != null)
+            {
+                if (!iconButton.IsVisible)
+                {
+                    _applicationBar.Buttons.Remove(iconButton.Button);
+                }
+                else
+                {
+                    var index = Items.Where(c => c is BindableApplicationBarIconButton).ToList().IndexOf(iconButton);
+                    _applicationBar.Buttons.Insert(index, iconButton.Button);
+                }
+                return;
+            }
+            var menuItem = sender as BindableApplicationBarMenuItem;
+            if (menuItem == null)
+            {
+                return;
+            }
+            if (!menuItem.IsVisible)
+            {
+                _applicationBar.MenuItems.Remove(menuItem.MenuItem);
+            }
+            else
+            {
+                var index = Items.Where(c => c is BindableApplicationBarMenuItem).ToList().IndexOf(menuItem);
+                _applicationBar.MenuItems.Insert(index, menuItem.MenuItem);
             }
         }
 
