@@ -4,7 +4,6 @@ using System.Windows;
 using Vermeil;
 using Vermeil.Core;
 using Vermeil.Core.Logging;
-using Vermeil.Notify;
 
 #endregion
 
@@ -17,7 +16,7 @@ namespace Sample
             Container.Register<ILogger, NullLogger>("silent");
             Container.Register<ILogger, DebugLogger>();
             Container.Resolve<ILogger>().Debug("Init complete");
-            Container.RegisterInstance((IProgressIndicatorService)Application.Current.Resources["IndicatorService"]);
+            Container.RegisterInstance((IProgressIndicatorService) Application.Current.Resources["IndicatorService"]);
             ShowAlignmentGrid = true;
         }
     }

@@ -12,12 +12,13 @@ namespace Vermeil.Controls
 {
     public class BindableApplicationBarIconButton : FrameworkElement, IApplicationBarIconButton
     {
-        public static readonly DependencyProperty CommandProperty = VermeilExtensions.RegisterAttached<ICommand, BindableApplicationBarIconButton>("Command", null, CommandChanged);
-        public static readonly DependencyProperty CommandParameterProperty = VermeilExtensions.RegisterAttached<object, BindableApplicationBarIconButton>("CommandParameter", null, CommandParameterChanged);
+        public static readonly DependencyProperty CommandProperty = VermeilExtensions.Register<ICommand, BindableApplicationBarIconButton>("Command", null, CommandChanged);
+        public static readonly DependencyProperty CommandParameterProperty = VermeilExtensions.Register<object, BindableApplicationBarIconButton>("CommandParameter", null, CommandParameterChanged);
         public static readonly DependencyProperty CommandParameterValueProperty = VermeilExtensions.RegisterAttached<object, BindableApplicationBarIconButton>("CommandParameterValue");
-        public static readonly DependencyProperty IsEnabledProperty = VermeilExtensions.RegisterAttached<bool, BindableApplicationBarIconButton>("IsEnabled", true, OnEnabledChanged);
-        public static readonly DependencyProperty TextProperty = VermeilExtensions.RegisterAttached<string, BindableApplicationBarIconButton>("Text", null, OnTextChanged);
-        public static readonly DependencyProperty IconUriProperty = VermeilExtensions.RegisterAttached<Uri, BindableApplicationBarIconButton>("IconUri", null, OnIconUriChanged);
+        public static readonly DependencyProperty IsEnabledProperty = VermeilExtensions.Register<bool, BindableApplicationBarIconButton>("IsEnabled", true, OnEnabledChanged);
+        public static readonly DependencyProperty IsVisibleProperty = VermeilExtensions.Register<bool, BindableApplicationBarIconButton>("IsVisible", true, (x, y) => x.OnVisibleChanged(x, y));
+        public static readonly DependencyProperty TextProperty = VermeilExtensions.Register<string, BindableApplicationBarIconButton>("Text", null, OnTextChanged);
+        public static readonly DependencyProperty IconUriProperty = VermeilExtensions.Register<Uri, BindableApplicationBarIconButton>("IconUri", null, OnIconUriChanged);
 
         public BindableApplicationBarIconButton()
         {
@@ -45,6 +46,12 @@ namespace Vermeil.Controls
 
         public ApplicationBarIconButton Button { get; set; }
 
+        public bool IsVisible
+        {
+            get { return (bool) GetValue(IsVisibleProperty); }
+            set { SetValue(IsVisibleProperty, value); }
+        }
+
         public bool IsEnabled
         {
             get { return (bool) GetValue(IsEnabledProperty); }
@@ -68,6 +75,8 @@ namespace Vermeil.Controls
             get { return (Uri) GetValue(IconUriProperty); }
             set { SetValue(IconUriProperty, value); }
         }
+
+        internal event EventHandler IsVisibleChanged;
 
         private static void CommandChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -95,6 +104,18 @@ namespace Vermeil.Controls
             if (e.NewValue != e.OldValue)
             {
                 ((BindableApplicationBarIconButton) d).Button.IsEnabled = (bool) e.NewValue;
+            }
+        }
+
+        private void OnVisibleChanged(BindableApplicationBarIconButton d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue == e.OldValue)
+            {
+                return;
+            }
+            if (IsVisibleChanged != null)
+            {
+                IsVisibleChanged(d, new EventArgs());
             }
         }
 

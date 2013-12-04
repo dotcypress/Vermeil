@@ -15,7 +15,7 @@ namespace Vermeil.Controls
     public class OrientedLayout : Control
     {
         public static readonly DependencyProperty OrientationProperty = VermeilExtensions.Register<PageOrientation, OrientedLayout>("Orientation");
-        
+
         public OrientedLayout()
         {
             DefaultStyleKey = typeof (OrientedLayout);

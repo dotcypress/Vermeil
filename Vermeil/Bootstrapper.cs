@@ -27,12 +27,12 @@ namespace Vermeil
 {
     public abstract class Bootstrapper : IApplicationService
     {
+        private Rectangle _aligmentToggle;
         private Grid _alignmentGrid;
         private bool _clearHistory;
         private bool _isFastResume;
         private bool _showAlignmentGrid;
-        private Rectangle _aligmentToggle;
-        
+
         protected Bootstrapper()
         {
             Container = new IocContainer();
@@ -264,20 +264,14 @@ namespace Vermeil
             _alignmentGrid.Opacity = 0.2;
             _aligmentToggle = new Rectangle
             {
-                Width = 15,
-                Height = 15,
-                RadiusX = 7,
-                RadiusY = 7,
+                Width = 23,
+                Height = 49,
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(5),
                 Visibility = _showAlignmentGrid ? Visibility.Visible : Visibility.Collapsed,
-                Fill = new SolidColorBrush(Colors.Orange)
+                Fill = new SolidColorBrush(Colors.Purple)
             };
-            _aligmentToggle.Tap += (s, e) =>
-                {
-                    _alignmentGrid.Visibility = _alignmentGrid.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-                };
+            _aligmentToggle.Tap += (s, e) => { _alignmentGrid.Visibility = _alignmentGrid.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible; };
             parent.Children.Add(_alignmentGrid);
             parent.Children.Add(_aligmentToggle);
         }

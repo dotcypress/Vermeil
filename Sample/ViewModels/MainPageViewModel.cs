@@ -2,74 +2,82 @@
 
 using System.Windows;
 using System.Windows.Input;
-using Vermeil;
 using Vermeil.Commands;
 using Vermeil.Core;
 using Vermeil.Core.IoC;
 using Vermeil.Core.Logging;
 using Vermeil.MVVM;
-using Vermeil.Notify;
 using Vermeil.State;
 
 #endregion
 
 namespace Sample.ViewModels
 {
-	public class MainPageViewModel : ViewModel
-	{
-		public static readonly DependencyProperty MyPropertyProperty =
-			DependencyProperty.Register("MyProperty", typeof (string), typeof (MainPageViewModel), new PropertyMetadata(null));
+    public class MainPageViewModel : ViewModel
+    {
+        public static readonly DependencyProperty MyPropertyProperty =
+            DependencyProperty.Register("MyProperty", typeof (string), typeof (MainPageViewModel), new PropertyMetadata(null));
 
-		[Tombstoned]
-		public string MyProperty
-		{
-			get { return (string) GetValue(MyPropertyProperty); }
-			set { SetValue(MyPropertyProperty, value); }
-		}
+        public static readonly DependencyProperty ShowButtonProperty =
+            DependencyProperty.Register("ShowButton", typeof (bool), typeof (MainPageViewModel), new PropertyMetadata(true));
 
-		[Inject]
-		public ILogger Logger { get; set; }
 
-		[Inject]
-		public IProgressIndicatorService ProgressIndicatorService { get; set; }
+        [Tombstoned]
+        public string MyProperty
+        {
+            get { return (string) GetValue(MyPropertyProperty); }
+            set { SetValue(MyPropertyProperty, value); }
+        }
 
-		[Inject("silent")]
-		public ILogger SilentLogger { get; set; }
+        public bool ShowButton
+        {
+            get { return (bool) GetValue(ShowButtonProperty); }
+            set { SetValue(ShowButtonProperty, value); }
+        }
 
-		public ICommand InfoCommand
-		{
-			get { return new RelayCommand<string>(x => Logger.Debug(x), x => !string.IsNullOrWhiteSpace(x)); }
-		}
+        [Inject]
+        public ILogger Logger { get; set; }
 
-		public ICommand IncreaseCommand
-		{
-			get { return new RelayCommand<string>(x => Increase()); }
-		}
+        [Inject]
+        public IProgressIndicatorService ProgressIndicatorService { get; set; }
 
-		public ICommand AboutCommand
-		{
-			get { return new NavigationCommand("/Views/AboutPage.xaml"); }
-		}
+        [Inject("silent")]
+        public ILogger SilentLogger { get; set; }
 
-		protected override void OnCreate()
-		{
-			Logger.Debug("OnCreate");
-			SilentLogger.Debug("Write log message to parallel universe :)");
-		}
+        public ICommand InfoCommand
+        {
+            get { return new RelayCommand<string>(x => Logger.Debug(x), x => !string.IsNullOrWhiteSpace(x)); }
+        }
 
-		protected override void OnLoad()
-		{
-			Logger.Debug("OnLoad");
-		}
+        public ICommand IncreaseCommand
+        {
+            get { return new RelayCommand<string>(x => Increase()); }
+        }
 
-		protected override void OnOrientationChanged()
-		{
-			Logger.Debug("OnOrientationChanged");
-		}
+        public ICommand AboutCommand
+        {
+            get { return new NavigationCommand("/Views/AboutPage.xaml"); }
+        }
 
-		private void Increase()
-		{
-		    
-		}
-	}
+        protected override void OnCreate()
+        {
+            Logger.Debug("OnCreate");
+            SilentLogger.Debug("Write log message to parallel universe :)");
+        }
+
+        protected override void OnLoad()
+        {
+            Logger.Debug("OnLoad");
+        }
+
+        protected override void OnOrientationChanged()
+        {
+            Logger.Debug("OnOrientationChanged");
+        }
+
+        private void Increase()
+        {
+            ShowButton = !ShowButton;
+        }
+    }
 }

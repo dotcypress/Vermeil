@@ -170,14 +170,14 @@ namespace Vermeil.Core
 
         public static string Pluralize(this int amount, string wordNominative, string wordGenitive, string wordPlural)
         {
-            var suffix = amount % 10 == 1 && amount % 100 != 11
+            var suffix = amount%10 == 1 && amount%100 != 11
                 ? wordNominative
-                : amount % 10 >= 2 && amount % 10 <= 4 && (amount % 100 < 10 || amount % 100 >= 20)
+                : amount%10 >= 2 && amount%10 <= 4 && (amount%100 < 10 || amount%100 >= 20)
                     ? wordGenitive
                     : wordPlural;
             return string.Format("{0} {1}", amount, suffix);
         }
-        
+
         #endregion
 
         #region DependencyProperty
