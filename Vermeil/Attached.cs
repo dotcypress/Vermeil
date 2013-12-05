@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -376,7 +377,7 @@ namespace Vermeil
         #region Animation Trigger
 
         public static readonly DependencyProperty AnimationTriggerProperty =
-            VermeilExtensions.RegisterAttached<object, Attached>("AnimationTrigger", null, AnimationTriggerChanged);
+            VermeilExtensions.RegisterAttached<bool?, Attached>("AnimationTrigger", null, AnimationTriggerChanged);
 
         public static bool GetAnimationTrigger(DependencyObject target)
         {
@@ -391,7 +392,7 @@ namespace Vermeil
         private static void AnimationTriggerChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
             var storyboard = target as Storyboard;
-            if (storyboard == null || !(e.NewValue is bool))
+            if (storyboard == null)
             {
                 return;
             }
@@ -402,20 +403,20 @@ namespace Vermeil
 
         #region Animation Conroller
 
-        public static readonly DependencyProperty AnimationConrollerProperty =
-            VermeilExtensions.RegisterAttached<bool, Attached>("AnimationConroller", false, AnimationConrollerChanged);
+        public static readonly DependencyProperty AnimationControllerProperty =
+            VermeilExtensions.RegisterAttached<bool, Attached>("AnimationController", false, AnimationControllerChanged);
 
-        public static bool GetAnimationConroller(DependencyObject target)
+        public static bool GetAnimationController(DependencyObject target)
         {
-            return (bool) target.GetValue(AnimationConrollerProperty);
+            return (bool) target.GetValue(AnimationControllerProperty);
         }
 
-        public static void SetAnimationConroller(DependencyObject target, bool value)
+        public static void SetAnimationController(DependencyObject target, bool value)
         {
-            target.SetValue(AnimationConrollerProperty, value);
+            target.SetValue(AnimationControllerProperty, value);
         }
 
-        private static void AnimationConrollerChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        private static void AnimationControllerChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
             var storyboard = target as Storyboard;
 
@@ -438,6 +439,55 @@ namespace Vermeil
                 storyboard.Begin();
                 storyboard.SeekAlignedToLastTick(time);
             }
+        }
+
+        #endregion
+
+        #region LoadMoreCommand
+
+        public static readonly DependencyProperty LoadMoreCommandProperty = VermeilExtensions.RegisterAttached<ICommand, Attached>("LoadMoreCommand", null, OnLoadMoreCommandChanged);
+
+        public static ICommand GetLoadMoreCommand(DependencyObject dependencyObject)
+        {
+            return (ICommand) dependencyObject.GetValue(LoadMoreCommandProperty);
+        }
+
+        public static void SetLoadMoreCommand(DependencyObject dependencyObject, ICommand value)
+        {
+            dependencyObject.SetValue(LoadMoreCommandProperty, value);
+        }
+
+        private static void OnLoadMoreCommandChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            var command = e.NewValue as ICommand;
+            if (command == null)
+            {
+                return;
+            }
+            if (!(dependencyObject is ListBox))
+            {
+                return;
+            }
+            var list = dependencyObject as ListBox;
+            list.Loaded += (s, ev) =>
+                {
+                    var scroll = list.FindFirstChild<ScrollViewer>();
+                    if (scroll == null)
+                    {
+                        return;
+                    }
+                    var property = VermeilExtensions.RegisterAttached<double, Attached>("VerticalOffsetListenAttached" + Guid.NewGuid(),
+                        0,
+                        (sender, ea) =>
+                            {
+                                if (scroll.VerticalOffset >= scroll.ScrollableHeight)
+                                {
+                                    command.Execute(null);
+                                }
+                            });
+                    var binding = new Binding {Source = scroll, Path = new PropertyPath("VerticalOffset"), Mode = BindingMode.OneWay};
+                    scroll.SetBinding(property, binding);
+                };
         }
 
         #endregion
