@@ -139,7 +139,7 @@ namespace Vermeil.Controls
                 else
                 {
                     var index = Items.Where(c => c is BindableApplicationBarIconButton).ToList().IndexOf(iconButton);
-                    _applicationBar.Buttons.Insert(index, iconButton.Button);
+                    _applicationBar.Buttons.Insert(Math.Min(index,_applicationBar.Buttons.Count), iconButton.Button);
                 }
                 return;
             }
@@ -155,7 +155,7 @@ namespace Vermeil.Controls
             else
             {
                 var index = Items.Where(c => c is BindableApplicationBarMenuItem).ToList().IndexOf(menuItem);
-                _applicationBar.MenuItems.Insert(index, menuItem.MenuItem);
+                _applicationBar.MenuItems.Insert(Math.Min(index, _applicationBar.MenuItems.Count), menuItem.MenuItem);
             }
         }
 
