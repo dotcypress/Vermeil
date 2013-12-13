@@ -28,6 +28,7 @@ namespace Vermeil.Navigation
 
         public void Navigate(string uri, PageQuery query)
         {
+            _backState = null;
             _rootFrame.Navigate(new Uri(uri + PageQuery.BuildQuery(query), UriKind.RelativeOrAbsolute));
         }
 
@@ -44,10 +45,7 @@ namespace Vermeil.Navigation
                 {
                     return;
                 }
-                if (state != null)
-                {
-                    _backState = state;
-                }
+                _backState = state;
                 NavigationService.StopLoading();
                 NavigationService.GoBack();
             }

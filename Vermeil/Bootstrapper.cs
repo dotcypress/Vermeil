@@ -269,7 +269,7 @@ namespace Vermeil
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Visibility = _showAlignmentGrid ? Visibility.Visible : Visibility.Collapsed,
-                Fill = new SolidColorBrush(Colors.Purple)
+                Fill = new SolidColorBrush(Colors.LightGray)
             };
             _aligmentToggle.Tap += (s, e) => { _alignmentGrid.Visibility = _alignmentGrid.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible; };
             parent.Children.Add(_alignmentGrid);
