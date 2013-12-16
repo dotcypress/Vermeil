@@ -11,6 +11,7 @@ namespace Vermeil.Cache
     {
         TimeSpan ExpirationDelay { get; set; }
         int MemoryCacheCapacity { get; set; }
+        bool IsEnabled { get; set; }
         ImageSource Get(Uri imageUri);
         void Cleanup();
         void Clear();
