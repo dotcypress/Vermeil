@@ -480,7 +480,7 @@ namespace Vermeil
                         0,
                         (sender, ea) =>
                             {
-                                if (scroll.VerticalOffset >= scroll.ScrollableHeight)
+                                if (scroll.ScrollableHeight - scroll.VerticalOffset < 0.1)
                                 {
                                     command.Execute(null);
                                 }
