@@ -91,6 +91,7 @@
     <Compile Include="Cache\IImageCache.cs" />
     <Compile Include="Cache\ImageCache.cs" />
     <Compile Include="Cache\ImageRequest.cs" />
+    <Compile Include="Commands\LazyCommand.cs" />
     <Compile Include="Commands\NavigationCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\OneShotDispatcherTimer.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Controls\OrientedLayout.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\ComplementColorConverter.cs" />
+    <Compile Include="Converters\InverseNullToVisibilityConverter.cs" />
     <Compile Include="Converters\IMultiValueConverter.cs" />
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBoolConverter.cs" />
@@ -112,6 +114,8 @@
     <Compile Include="Converters\StringToBooleanConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\TimeToStringConverter.cs" />
+    <Compile Include="Mapping\MapConverter.cs" />
+    <Compile Include="Mapping\Mapper.cs" />
     <Compile Include="MVVM\NavigationParamAttribute.cs" />
     <Compile Include="MVVM\ViewModel.cs" />
     <Compile Include="MVVM\ViewModelMap.cs" />
@@ -119,7 +123,6 @@
     <Compile Include="Navigation\INavigationManager.cs" />
     <Compile Include="Navigation\NavigationManager.cs" />
     <Compile Include="Navigation\PageQuery.cs" />
-    <Compile Include="Notify\IProgressIndicatorService.cs" />
     <Compile Include="Notify\ProgressIndicatorService.cs" />
     <Compile Include="State\IStateManager.cs" />
     <Compile Include="State\StateManager.cs" />

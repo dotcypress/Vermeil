@@ -2,6 +2,7 @@
 
 using System.Windows;
 using Microsoft.Phone.Controls;
+using Vermeil.Core;
 
 #endregion
 
@@ -9,11 +10,7 @@ namespace Vermeil.MVVM
 {
     public abstract class ViewModel : DependencyObject
     {
-        public static readonly DependencyProperty OrientationProperty =
-            DependencyProperty.Register("Orientation",
-                typeof (PageOrientation),
-                typeof (ViewModel),
-                new PropertyMetadata(PageOrientation.None, OnOrientationChanged));
+        public static readonly DependencyProperty OrientationProperty = VermeilExtensions.Register<PageOrientation, ViewModel>("Orientation", PageOrientation.None, OnOrientationChanged);
 
         internal bool IsCreated;
 
@@ -64,9 +61,8 @@ namespace Vermeil.MVVM
 
         #endregion
 
-        private static void OnOrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnOrientationChanged(ViewModel model, DependencyPropertyChangedEventArgs e)
         {
-            var model = (ViewModel) d;
             model.OnOrientationChanged();
         }
     }

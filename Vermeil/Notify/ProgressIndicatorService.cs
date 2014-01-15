@@ -12,15 +12,14 @@ using Vermeil.Core;
 
 namespace Vermeil.Notify
 {
-    internal class ProgressIndicatorService : DependencyObject, IProgressIndicatorService
+    public class ProgressIndicatorService : DependencyObject, IProgressIndicatorService
     {
         private readonly List<TaskHolder> _holders = new List<TaskHolder>();
         private readonly object _syncRoot = new object();
 
         #region Public members
 
-        public static readonly DependencyProperty IsBusyProperty =
-            DependencyProperty.Register("IsBusy", typeof (bool), typeof (ProgressIndicatorService), new PropertyMetadata(default(bool)));
+        public static readonly DependencyProperty IsBusyProperty = VermeilExtensions.Register<bool, ProgressIndicatorService>("IsBusy");
 
         public bool IsBusy
         {

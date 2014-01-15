@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows;
 
 #endregion
 
 namespace Vermeil.Core
 {
-    public static class Extensions
+    public delegate void PropertyChangedCallback<T>(T sender, DependencyPropertyChangedEventArgs e);
+
+    public static class VermeilExtensions
     {
         #region Expressions
 
@@ -163,6 +166,43 @@ namespace Vermeil.Core
             }
             action(input);
             return input;
+        }
+
+        public static string Pluralize(this int amount, string wordNominative, string wordGenitive, string wordPlural)
+        {
+            var suffix = amount%10 == 1 && amount%100 != 11
+                ? wordNominative
+                : amount%10 >= 2 && amount%10 <= 4 && (amount%100 < 10 || amount%100 >= 20)
+                    ? wordGenitive
+                    : wordPlural;
+            return string.Format("{0} {1}", amount, suffix);
+        }
+
+        #endregion
+
+        #region DependencyProperty
+
+        public static DependencyProperty Register<TProperty, TOwner>(string name,
+            TProperty defaultValue = default(TProperty),
+            PropertyChangedCallback<TOwner> callback = null) where TOwner : DependencyObject
+        {
+            var callbackWrapper = callback != null
+                ? (sender, e) => callback(sender as TOwner, e)
+                : (PropertyChangedCallback) null;
+            return DependencyProperty.Register(name,
+                typeof (TProperty),
+                typeof (TOwner),
+                new PropertyMetadata(defaultValue, callbackWrapper));
+        }
+
+        public static DependencyProperty RegisterAttached<TProperty, TOwner>(string name,
+            TProperty defaultValue = default(TProperty),
+            PropertyChangedCallback callback = null)
+        {
+            return DependencyProperty.RegisterAttached(name,
+                typeof (TProperty),
+                typeof (TOwner),
+                new PropertyMetadata(defaultValue, callback));
         }
 
         #endregion

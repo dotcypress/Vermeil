@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Microsoft.Phone.Controls;
+using Vermeil.Core;
 
 #endregion
 
@@ -13,12 +14,7 @@ namespace Vermeil.Controls
 {
     public class OrientedLayout : Control
     {
-        public static readonly DependencyProperty OrientationProperty =
-            DependencyProperty.Register("Orientation",
-                typeof (PageOrientation),
-                typeof (OrientedLayout),
-                new PropertyMetadata(PageOrientation.None));
-
+        public static readonly DependencyProperty OrientationProperty = VermeilExtensions.Register<PageOrientation, OrientedLayout>("Orientation");
 
         public OrientedLayout()
         {

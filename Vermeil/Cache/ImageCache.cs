@@ -25,13 +25,18 @@ namespace Vermeil.Cache
         public static readonly TimeSpan DefaultExpirationDelay = TimeSpan.FromDays(30);
         private TimeSpan _expirationDelay = DefaultExpirationDelay;
 
+        public ImageCache()
+        {
+            IsEnabled = true;
+        }
+
         public ImageSource Get(Uri imageUri)
         {
             if (!Deployment.Current.Dispatcher.CheckAccess())
             {
                 throw new UnauthorizedAccessException("invalid cross-thread access");
             }
-            if (imageUri == null || !imageUri.IsAbsoluteUri)
+            if (!IsEnabled || imageUri == null || !imageUri.IsAbsoluteUri)
             {
                 return null;
             }
@@ -51,6 +56,8 @@ namespace Vermeil.Cache
                 RequestCachePruning();
             }
         }
+
+        public bool IsEnabled { get; set; }
 
         public void Cleanup()
         {

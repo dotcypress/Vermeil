@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -26,7 +25,27 @@ namespace Vermeil
 
         public static T FindAncestorWithType<T>(this DependencyObject target) where T : class
         {
-            return GetAncestors(target).FirstOrDefault(typeof(T).IsInstanceOfType) as T;
+            return GetAncestors(target).FirstOrDefault(typeof (T).IsInstanceOfType) as T;
+        }
+        
+        public static T FindFirstChild<T>(this DependencyObject target) where T : class
+        {
+            var childCount = VisualTreeHelper.GetChildrenCount(target);
+            for (var i = 0; i < childCount; i++)
+            {
+                var dependencyObject = VisualTreeHelper.GetChild(target, i);
+                var child = dependencyObject as T;
+                if (child != null)
+                {
+                    return child;
+                }
+                var result = FindFirstChild<T>(dependencyObject);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
         }
 
         #endregion

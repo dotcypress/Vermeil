@@ -87,7 +87,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CurrentApp.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="IProgressIndicatorService.cs" />
+    <Compile Include="VermeilExtensions.cs" />
     <Compile Include="IoC\InjectAttribute.cs" />
     <Compile Include="IoC\IocContainer.cs" />
     <Compile Include="IoC\IocException.cs" />
